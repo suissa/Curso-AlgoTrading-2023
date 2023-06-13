@@ -1,0 +1,35 @@
+{
+  "name": "algotrading---meu",
+  "version": "1.0.0",
+  "description": "- Visão geral do mercado financeiro e do trading algorítmico - Conceitos básicos de trading: ordens, tipos de ordens, margem, alavancagem, etc. - Introdução a análise técnica e análise fundamentalista - Estratégias de trading comuns",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suissa/Curso-AlgoTrade.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suissa/Curso-AlgoTrade/issues"
+  },
+  "homepage": "https://github.com/suissa/Curso-AlgoTrade#readme",
+  "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.10",
+    "@tensorflow/tfjs": "^4.4.0",
+    "binance-api-node": "^0.12.4",
+    "dotenv": "^16.0.3",
+    "google-protobuf": "^3.21.2",
+    "long": "^5.2.3",
+    "ml-cart": "^2.1.1",
+    "moment": "^2.29.4",
+    "node-binance-api": "^0.13.1",
+    "progress": "^2.0.3",
+    "regression": "^2.0.1",
+    "seedrandom": "^3.0.5",
+    "technicalindicators": "^3.1.0"
+  }
+}
