@@ -1,16 +1,18 @@
-const Binance = require("binance-api-node").default;
 require("dotenv").config();
+// const Binance = require("binance-api-node").default;
 
 const API_KEY = process.env.API_KEY_BRAVE;
 const API_SECRET = process.env.API_SECRET_BRAVE;
 
-const client = Binance({
-  apiKey: API_KEY,
-  apiSecret: API_SECRET,
-  futures: true // ativa o modo de futuros
-});
+// const client = Binance({
+//   apiKey: API_KEY,
+//   apiSecret: API_SECRET,
+//   futures: true // ativa o modo de futuros
+// });
 
-const symbol = "BTCUSDT";
+const client = require('./factories/binance-api-node')(API_KEY, API_SECRET);
+const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
+
 
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
@@ -400,11 +402,32 @@ const testToCreatePosition = async (data) => {
   return signal;
 }
 
+const getFuturesBalances = async (symbol = "USDT") => {
+  try {
+    const accountInfo = await binance.futuresBalance();
+    const balances = accountInfo.filter(balance => balance.asset === symbol);
+    const {balance} = balances[0];
+    return parseFloat(balance);
+    console.log('Futures Balances:', balances, {balance});
+  } catch (error) {
+    console.error('Error fetching futures account info:', error);
+  }
+}
+
+const calcOrderPrice = (price, quantity = 0.002, leverage = 5) => {
+  if (price < 27000) return false;
+  const orderPrice = price * quantity / leverage;
+  // console.log({orderPrice})
+  return parseFloat(orderPrice.toFixed(2));
+}
+
 const STRATEGY_DIFF_TO_CLOSE = 50;
 const STRATEGY_DIFF_TO_AVERAGE = 50;
 const STRATEGY_MAX_AVERAGE_PRICES = 3;
 const STRATEGY_VALUE_TO_STOP_LOSS = 100;
 
+const symbol = "BTCUSDT";
+const leverage = 5;
 let amountOfAveragePrices = 0;
 
 setInterval( async () => {
@@ -457,9 +480,17 @@ setInterval( async () => {
           console.log({result});
         }
       }
+
+      const positionPrice = amount * entryPrice / STRATEGY_LEVERAGE
+      const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
+      const balanceTotal = await getFuturesBalances("USDT")
+      const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
+
       // preço médio
-      if (amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES 
-          && (entryPrice + STRATEGY_DIFF_TO_AVERAGE < price || entryPrice - STRATEGY_DIFF_TO_AVERAGE > price)) {
+      if (amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES && 
+          (entryPrice + STRATEGY_DIFF_TO_AVERAGE < price || entryPrice - STRATEGY_DIFF_TO_AVERAGE > price) &&
+          entryPrice > 0 && 
+          balance > orderPrice) {
         amountOfAveragePrices += 1;
         // PRIMEIRO CANCELA A ORDEM DE FECHAMENTO
         if (openOrders.length > 0) {
