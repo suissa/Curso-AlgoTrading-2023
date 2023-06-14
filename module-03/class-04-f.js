@@ -1,6 +1,6 @@
 const Binance = require("binance-api-node").default;
 require("dotenv").config();
-
+// ta funcionando
 const API_KEY = process.env.API_KEY_BRAVE;
 const API_SECRET = process.env.API_SECRET_BRAVE;
 
