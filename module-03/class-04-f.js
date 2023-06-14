@@ -238,17 +238,6 @@ setInterval( async () => {
           console.log({result});
         }
       }
-      const entryPrice = parseFloat(position.entryPrice)
-      const side = parseFloat(position.positionAmt) > 0 ? "BUY" : "SELL"
-      const quantity = Math.abs(parseFloat(position.positionAmt))
-      const positionPrice = quantity * entryPrice / STRATEGY_LEVERAGE
-      const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
-      const balanceTotal = await getFuturesBalances("USDT")
-      const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
-
-
-      console.log("\n\n\n", {orderPrice, balance})
-      if (entryPrice > 0 && balance > orderPrice) {
       // preço médio
       if (amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES) {
         // SE a posição for de compra, cria uma ordem de compra
