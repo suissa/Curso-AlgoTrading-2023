@@ -102,7 +102,7 @@ const createOrder = async (order) => {
   
 }
 
-function testToCreatePosition(trendPeriods) {
+async function testToCreatePosition(trendPeriods) {
   console.log("\ntestToCreatePosition");
   // Calcular o indicador OBV
   const obv = calculateOBV(trendPeriods);
@@ -118,12 +118,32 @@ function testToCreatePosition(trendPeriods) {
   if (trendSum > 0) {
     console.log('Sinal de compra! \n\n\n');
     // Coloque sua lógica de execução de compra aqui
+    const quantity = 0.001;
+    const order = {
+      quantity,
+      symbol,
+      type: "MARKET",
+      side: "BUY"
+    }
+    console.log({order});
+    const result = await createOrder(order);
+    console.log({result});
   }
 
   // Sinal de venda
   if (trendSum < 0) {
     console.log('Sinal de venda! \n\n\n');
     // Coloque sua lógica de execução de venda aqui
+    const quantity = 0.001;
+    const order = {
+      quantity,
+      symbol,
+      type: "MARKET",
+      side: "SELL"
+    }
+    console.log({order});
+    const result = await createOrder(order);
+    console.log({result});
   }
 }
 
