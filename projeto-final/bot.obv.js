@@ -4,6 +4,7 @@ const TechnicalIndicators = require('technicalindicators');
 
 const API_KEY = process.env.API_KEY_BRAVE;
 const API_SECRET = process.env.API_SECRET_BRAVE;
+
 // Configuração inicial
 const client = Binance({
   apiKey: API_KEY,
