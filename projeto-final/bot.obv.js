@@ -103,7 +103,7 @@ const createOrder = async (order) => {
 }
 
 function testToCreatePosition(trendPeriods) {
-
+  console.log("\ntestToCreatePosition");
   // Calcular o indicador OBV
   const obv = calculateOBV(trendPeriods);
   let trendSum = 0;
