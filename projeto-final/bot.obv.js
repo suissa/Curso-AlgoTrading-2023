@@ -48,11 +48,12 @@ const getPosition = async (symbol = "BTCUSDT") => {
   }
 }
 
-const getCandles = async (symbol = "BTCUSDT", interval = "5m") => {
+const getCandles = async (symbol = "BTCUSDT", interval = "15m") => {
   try {
     const candles = await client.futuresCandles({
       symbol: symbol,
-      interval: interval
+      interval: interval,
+      limit: 10
     });
     // console.log("Last candle: ", candles[candles.length - 1]);
     return candles;
@@ -196,13 +197,14 @@ setInterval( async () => {
     const candles = await getCandles(symbol);
     const lastPrice = candles[candles.length - 1].close;
 
-    if (!hasOpenPosition) {
+    if (hasOpenPosition) {
 
       // // Obter dados históricos
       // const candles = await getHistoricalData(symbol, interval, limit);
       // Verifica condição para criar uma ordem
       await testToCreatePosition(candles);
 
+      return false;
     } else { // se tem posição aberta
       const openOrders = await getFutureOpenOrders(symbol);
       const lastCandle = candles[candles.length - 1];
