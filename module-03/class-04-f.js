@@ -191,9 +191,9 @@ const testToCreatePosition = async (data) => {
 }
 
 const STRATEGY_DIFF_TO_CLOSE = 30;
-const STRATEGY_DIFF_TO_AVERAGE = 50;
+const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
-const STRATEGY_VALUE_TO_STOP_LOSS = 50;
+const STRATEGY_VALUE_TO_STOP_LOSS = 200;
 
 let amountOfAveragePrices = 0;
 
