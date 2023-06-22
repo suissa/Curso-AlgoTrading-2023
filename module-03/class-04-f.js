@@ -150,6 +150,15 @@ const testToCreatePosition = async (data) => {
   const isLastThreeReds = analyzeIfLastThreeCandlesAreRed(data);
   const isLastThreeGreens = analyzeIfLastThreeCandlesAreGreen(data);
 
+  let logStrategy = {
+    isRsiOverSold,    
+    isMacdCrossOver,    
+    isLastThreeGreens,    
+    isSmaCrossUnder,    
+    isRsiOverBought,    
+    isMacdCrossUnder,    
+    isLastThreeReds
+  }
   if ((isSmaCrossOver && isRsiOverSold && isMacdCrossOver) || isLastThreeGreens) {
     console.log("\n\n\n Entrou na estratégia BUY - create order", {isSmaCrossOver, isRsiOverSold, isMacdCrossOver, isLastThreeGreens});
     const price = data[lastIndex].close; // pega o último preço
@@ -177,19 +186,18 @@ const testToCreatePosition = async (data) => {
     const result = await createOrder(order);
     console.log({result});
   }
-
+  console.log({logStrategy});
   return signal;
 }
 
 const STRATEGY_DIFF_TO_CLOSE = 30;
 const STRATEGY_DIFF_TO_AVERAGE = 50;
-const STRATEGY_MAX_AVERAGE_PRICES = 5;
-const STRATEGY_VALUE_TO_STOP_LOSS = 100;
+const STRATEGY_MAX_AVERAGE_PRICES = 6;
+const STRATEGY_VALUE_TO_STOP_LOSS = 50;
 
 let amountOfAveragePrices = 0;
 
-setInterval( async () => {
-  console.log("\n\n\nrodando...", new Date());
+const runBot = async (symbol = "BTCUSDT") => {
   try {
     const position = await getPosition(symbol);
     const hasOpenPosition = position.positionAmt != "0.000";
@@ -316,5 +324,12 @@ setInterval( async () => {
   } catch (error) {
     console.error(error);
   }
+}
+
+runBot();
+
+setInterval( async () => {
+  console.log("\n\n\nrodando...", new Date());
+  await runBot();
 
 }, 10 * 1000)
