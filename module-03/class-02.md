@@ -107,3 +107,5 @@ async function getAccountInfo() {
 ;(async () => getAccountInfo())();
 
 ```
+Caso vc receba o seguinte erro `Error: Invalid API-key, IP, or permissions for action, request ip: $IP`
+basta você adicionar seu IP nas restrições da sua API criada na Binance.
