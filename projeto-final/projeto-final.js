@@ -421,9 +421,102 @@ const calcOrderPrice = (price, quantity = 0.002, leverage = 5) => {
   return parseFloat(orderPrice.toFixed(2));
 }
 
-const STRATEGY_DIFF_TO_CLOSE = 50;
-const STRATEGY_DIFF_TO_AVERAGE = 50;
-const STRATEGY_MAX_AVERAGE_PRICES = 3;
+const stopLoss = async (position, amountOfAveragePrices) => {
+
+  const entryPrice = parseFloat(position.entryPrice);
+  const amount = parseFloat(position.positionAmt);
+  const side = amount > 0 ? "BUY" : "SELL";
+  const quantity = Math.abs(amount);
+
+
+    amountOfAveragePrices = 0;
+    // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
+    console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice})
+    if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
+      const order = {
+        symbol,
+        quantity,
+        type: "MARKET",
+        side: "SELL"
+      }
+      const result = await createOrder(order);
+      console.log(result);
+    }
+    // se o lastPrice for maior que o entryPrice mais o valor do stop loss e side SELL
+    if (side == "SELL" && entryPrice + STRATEGY_VALUE_TO_STOP_LOSS < lastPrice) {
+      const order = {
+        symbol,
+        quantity,
+        type: "MARKET",
+        side: "BUY"
+      }
+      const result = await createOrder(order);
+      console.log(result);
+    }
+}
+const getDataFromPosition = (position) => {
+  const hasOpenPosition = position.positionAmt != "0.000";
+  const entryPrice = parseFloat(position.entryPrice);
+  const amount = parseFloat(position.positionAmt);
+  const side = amount > 0 ? "BUY" : "SELL";
+  const quantity = Math.abs(amount);
+
+  return {hasOpenPosition, entryPrice, amount, side, quantity};
+}
+
+const isBuyPriceWithinStrategyRange = (entryPrice) => entryPrice + STRATEGY_DIFF_TO_AVERAGE < price
+const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIFF_TO_AVERAGE > price
+
+const averagePrice = async (position, lastPrice) => {
+  const {hasOpenPosition, entryPrice, amount, side, quantity} = getDataFromPosition(position);
+
+  const positionPrice = amount * entryPrice / STRATEGY_LEVERAGE
+  const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
+  const balanceTotal = await getFuturesBalances("USDT")
+
+  const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
+  if((isBuyPriceWithinStrategyRange || isSellPriceWithinStrategyRange) 
+    && entryPrice > 0 
+    && balance > orderPrice) {
+    amountOfAveragePrices += 1;
+    // PRIMEIRO CANCELA A ORDEM DE FECHAMENTO
+    if (openOrders.length > 0) {
+      const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
+      console.log(cancel);
+    }
+    // SE a posição for de compra, cria uma ordem de venda
+    // type: "LIMIT" para criar a ordem que será executada direto
+    if (side === "BUY") {
+      console.log("PREÇO MÉDIO - criando ordem de venda", {side});
+      const order = {
+        symbol,
+        quantity,
+        type: "LIMIT",
+        side: "SELL",
+        price: Number((entryPrice + STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
+      }
+      const result = await createOrder(order);
+      console.log(result);
+    }
+    // SE a posição for de venda, cria uma ordem de compra
+    if (side === "SELL") {
+      console.log("PREÇO MÉDIO - criando ordem de compra", {side});
+      const order = {
+        symbol,
+        quantity,
+        type: "LIMIT",
+        side: "SELL",
+        price: Number((entryPrice - STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
+      }
+      const result = await createOrder(order);
+      console.log(result);
+    }
+  }
+}
+
+const STRATEGY_DIFF_TO_CLOSE = 30;
+const STRATEGY_DIFF_TO_AVERAGE = 100;
+const STRATEGY_MAX_AVERAGE_PRICES = 5;
 const STRATEGY_VALUE_TO_STOP_LOSS = 100;
 
 const symbol = "BTCUSDT";
@@ -481,79 +574,18 @@ setInterval( async () => {
         }
       }
 
-      const positionPrice = amount * entryPrice / STRATEGY_LEVERAGE
-      const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
-      const balanceTotal = await getFuturesBalances("USDT")
-      const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
 
       // preço médio
-      if (amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES && 
-          (entryPrice + STRATEGY_DIFF_TO_AVERAGE < price || entryPrice - STRATEGY_DIFF_TO_AVERAGE > price) &&
-          entryPrice > 0 && 
-          balance > orderPrice) {
-        amountOfAveragePrices += 1;
-        // PRIMEIRO CANCELA A ORDEM DE FECHAMENTO
-        if (openOrders.length > 0) {
-          const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
-          console.log(cancel);
-        }
-        // SE a posição for de compra, cria uma ordem de venda
-        // type: "LIMIT" para criar a ordem que será executada direto
-        if (side === "BUY") {
-          console.log("PREÇO MÉDIO - criando ordem de venda", {side});
-          const order = {
-            symbol,
-            quantity,
-            type: "LIMIT",
-            side: "SELL",
-            price: Number((entryPrice + STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
-          }
-          const result = await createOrder(order);
-          console.log(result);
-        }
-        // SE a posição for de venda, cria uma ordem de compra
-        if (side === "SELL") {
-          console.log("PREÇO MÉDIO - criando ordem de compra", {side});
-          const order = {
-            symbol,
-            quantity,
-            type: "LIMIT",
-            side: "SELL",
-            price: Number((entryPrice - STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
-          }
-          const result = await createOrder(order);
-          console.log(result);
-        }
+      if (hasOpenPosition && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES {
+        return averagePrice(position, amountOfAveragePrices)
       }
 
       // STOP LOSS
+      
       if (amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
-        amountOfAveragePrices = 0;
-        // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
-        console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice})
-        if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
-          const order = {
-            symbol,
-            quantity,
-            type: "MARKET",
-            side: "SELL"
-          }
-          const result = await createOrder(order);
-          console.log(result);
-        }
-        // se o lastPrice for maior que o entryPrice mais o valor do stop loss e side SELL
-        if (side == "SELL" && entryPrice + STRATEGY_VALUE_TO_STOP_LOSS < lastPrice) {
-          const order = {
-            symbol,
-            quantity,
-            type: "MARKET",
-            side: "BUY"
-          }
-          const result = await createOrder(order);
-          console.log(result);
-        }
+        return stopLoss(position, amountOfAveragePrices)
       }
-    }
+      }
   } catch (error) {
     console.error(error);
   }
