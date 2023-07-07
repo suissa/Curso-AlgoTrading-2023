@@ -132,12 +132,12 @@ const getTrend = (candles) => {
 };
 
 
-const checkVolumeAndTrend = (candles, volumeThreshold, trendConfirmationThreshold) => {
-  const firstCandle = candles[0];
-  const lastCandle = candles[candles.length - 1];
+const checkVolumeAndTrend = async (candles, volumeThreshold, trendConfirmationThreshold) => {
+  const firstCandle = candles[candles.length - 3];
+  const lastCandle = candles[candles.length - 2];
 
-  const firstVolume = parseFloat(firstCandle[5]); // Volume da primeira vela
-  const lastVolume = parseFloat(lastCandle[5]); // Volume da última vela
+  const firstVolume = parseFloat(firstCandle.volume); // Volume da primeira vela
+  const lastVolume = parseFloat(lastCandle.volume); // Volume da última vela
 
   console.log(`Volume da primeira vela: ${firstVolume}`);
   console.log(`Volume da última vela: ${lastVolume}`);
@@ -149,15 +149,36 @@ const checkVolumeAndTrend = (candles, volumeThreshold, trendConfirmationThreshol
     if (lastVolume >= volumeThreshold && lastVolume > firstVolume && lastVolume >= trendConfirmationThreshold) {
       console.log(`\n\nAlto volume (${lastVolume}) - Continuação de tendência de alta`);
       // Implemente a lógica para continuação de tendência de alta aqui
-      console.log("createOrder BUY");
+      console.log("uptrend createOrder BUY");
 
+      const quantity = 0.001;
+      const order = {
+        quantity,
+        symbol,
+        type: "MARKET",
+        side: "BUY"
+      }
+      console.log({order});
+      const result = await createOrder(order);
+      console.log({result});
       return;
     } 
-    if (lastVolume < volumeThreshold && lastVolume < firstVolume && lastVolume <= trendConfirmationThreshold) {
+    if (lastVolume < volumeThreshold && lastVolume < firstVolume) {
       
       console.log(`\n\nBaixo volume (${lastVolume}) - Reversão de tendência de alta para baixa`);
       // Implemente a lógica para continuação de tendência de alta aqui
-      console.log("createOrder SELL");
+      console.log("uptrend createOrder SELL");
+
+      const quantity = 0.001;
+      const order = {
+        quantity,
+        symbol,
+        type: "MARKET",
+        side: "SELL"
+      }
+      console.log({order});
+      const result = await createOrder(order);
+      console.log({result});
       return;
     }
     console.log('Volume inconclusivo para continuação de tendência de alta');
@@ -167,15 +188,35 @@ const checkVolumeAndTrend = (candles, volumeThreshold, trendConfirmationThreshol
     if (lastVolume >= volumeThreshold && lastVolume > firstVolume && lastVolume >= trendConfirmationThreshold) {
       console.log(`\n\nAlto volume (${lastVolume}) - Continuação de tendência de alta`);
       // Implemente a lógica para continuação de tendência de alta aqui
-      console.log("createOrder SELL");
+      console.log("downtrend createOrder SELL");
 
+      const quantity = 0.001;
+      const order = {
+        quantity,
+        symbol,
+        type: "MARKET",
+        side: "SELL"
+      }
+      console.log({order});
+      const result = await createOrder(order);
+      console.log({result});
       return;
     } 
-    if (lastVolume < volumeThreshold && lastVolume < firstVolume && lastVolume <= trendConfirmationThreshold) {
+    if (lastVolume < volumeThreshold && lastVolume < firstVolume) {
       
       console.log(`\n\nBaixo volume (${lastVolume}) - Reversão de tendência de baixa para alta`);
       // Implemente a lógica para continuação de tendência de alta aqui
-      console.log("createOrder BUY");
+      console.log("downtrend createOrder BUY");
+      const quantity = 0.001;
+      const order = {
+        quantity,
+        symbol,
+        type: "MARKET",
+        side: "BUY"
+      }
+      console.log({order});
+      const result = await createOrder(order);
+      console.log({result});
       return;
     }
     console.log('Volume inconclusivo para continuação de tendência de alta');
@@ -188,6 +229,7 @@ const checkVolumeAndTrend = (candles, volumeThreshold, trendConfirmationThreshol
 
 
 const getBinanceFuturesVolumeAndTrend = async (candles) => {
+
   try {
     const symbol = 'BTCUSDT';
     const interval = '5m'; // Intervalo das velas (candles), neste exemplo, 1 hora
@@ -195,13 +237,7 @@ const getBinanceFuturesVolumeAndTrend = async (candles) => {
     const volumeThreshold = 12000; // Limite de volume para distinguir alto e baixo (exemplo)
     const trendConfirmationThreshold = 0.02; // Limite de confirmação de tendência (exemplo)
 
-    // Simulação de um array de velas (candles) para teste
-    const candles = [
-      // Insira aqui os dados das velas (candles)
-      // Cada vela deve ser um array com as informações necessárias
-    ];
-
-    checkVolumeAndTrend(candles, volumeThreshold, trendConfirmationThreshold);
+    await checkVolumeAndTrend(candles, volumeThreshold, trendConfirmationThreshold);
   } catch (error) {
     console.error(error);
   }
