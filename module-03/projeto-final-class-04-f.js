@@ -1,6 +1,6 @@
 const Binance = require("binance-api-node").default;
 require("dotenv").config();
-// ta funcionando
+
 const API_KEY = process.env.API_KEY_BRAVE;
 const API_SECRET = process.env.API_SECRET_BRAVE;
 
@@ -30,7 +30,6 @@ const getCandles = async (symbol = "BTCUSDT", interval = "5m") => {
       symbol: symbol,
       interval: interval
     });
-    // console.log("Last candle: ", candles[candles.length - 1]);
     return candles;
   } catch (error) {
     console.error(error);
