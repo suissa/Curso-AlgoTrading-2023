@@ -14,6 +14,13 @@ const client = Binance({
   futures: true // ativa o modo de futuros
 });
 
+const PERIOD5 = 5;
+const PERIOD10 = 10;
+const PERIOD20 = 20;
+const PERIOD50 = 50;
+const PERIOD100 = 100;
+const PERIOD200 = 200;
+
 const getCandles = async (symbol = "BTCUSDT", interval = "1m") => {
   try {
     const candles = await client.futuresCandles({
@@ -90,7 +97,12 @@ const PriceDataSchema = new Schema({
       histogram: Number
     }],
     obv: [Number],
-    roc: Number,
+    roc5: [Number],
+    roc10: [Number],
+    roc20: [Number],
+    roc50: [Number],
+    roc100: [Number],
+    roc200: [Number],
     stoch: {
       k: Number,
       d: Number
@@ -217,12 +229,12 @@ async function fetchData() {
       const adx = (new ti.ADX(input).getResult())[0];
       const atr = (new ti.ATR(input).getResult())[0];
       const cci = (new ti.CCI({...input, period: 20}).getResult())[0];
-      const forceIndex5 = new ti.ForceIndex({...input, period: 5}).getResult()[0];
-      const forceIndex10 = new ti.ForceIndex({...input, period: 10}).getResult()[0];
-      const forceIndex20 = new ti.ForceIndex({...input, period: 20}).getResult()[0];
-      const forceIndex50 = new ti.ForceIndex({...input, period: 50}).getResult()[0];
-      const forceIndex100 = new ti.ForceIndex({...input, period: 100}).getResult()[0];
-      const forceIndex200 = new ti.ForceIndex({...input, period: 200}).getResult()[0];
+      const forceIndex5 = new ti.ForceIndex({...input, period: PERIOD5}).getResult()[0];
+      const forceIndex10 = new ti.ForceIndex({...input, period: PERIOD10}).getResult()[0];
+      const forceIndex20 = new ti.ForceIndex({...input, period: PERIOD20}).getResult()[0];
+      const forceIndex50 = new ti.ForceIndex({...input, period: PERIOD50}).getResult()[0];
+      const forceIndex100 = new ti.ForceIndex({...input, period: PERIOD100}).getResult()[0];
+      const forceIndex200 = new ti.ForceIndex({...input, period: PERIOD200}).getResult()[0];
       const macd3 = new ti.MACD({values: input.close,
         fastPeriod        : 5,
         slowPeriod        : 8,
@@ -242,8 +254,12 @@ async function fetchData() {
         SimpleMAOscillator: false,
         SimpleMASignal    : false}).getResult();
       const obv = new ti.OBV.calculate(input);
-      // const wema = new ti.WEMA({period: 20, values: input.close}).getResult();
-      // const roc = new ti.ROC(input).getResult();
+      const roc5 = new ti.ROC({period: PERIOD5, values: input.close}).getResult();
+      const roc10 = new ti.ROC({period: PERIOD10, values: input.close}).getResult();
+      const roc20 = new ti.ROC({period: PERIOD20, values: input.close}).getResult();
+      const roc50 = new ti.ROC({period: PERIOD50, values: input.close}).getResult();
+      const roc100 = new ti.ROC({period: PERIOD100, values: input.close}).getResult();
+      const roc200 = new ti.ROC({period: PERIOD200, values: input.close}).getResult();
       // const stoch = new ti.Stochastic.calculate(input);
       // const williamsR = new ti.WilliamsR.calculate(input);
       // const ad = new ti.AD.calculate(input);
@@ -272,24 +288,30 @@ async function fetchData() {
       // const variance = new ti.Variance.calculate(input);
       // const truestrength = new ti.TrueStrength.calculate(input);
       
-      console.log(`SMA10: ${sma10}`);
-      console.log(`SMA20: ${sma20}`);
-      console.log(`SMA50: ${sma50}`);
-      console.log(`SMA100: ${sma100}`);
-      console.log(`SMA200: ${sma200}`);
-      // console.log(`EMA: ${ema}`);
-      console.log(`bollingerBands`, bollingerBands);
+      // console.log(`SMA10: ${sma10}`);
+      // console.log(`SMA20: ${sma20}`);
+      // console.log(`SMA50: ${sma50}`);
+      // console.log(`SMA100: ${sma100}`);
+      // console.log(`SMA200: ${sma200}`);
+      // // console.log(`EMA: ${ema}`);
+      // console.log(`bollingerBands`, bollingerBands);
       // console.log(`Alligator:`, { jaw, teeth, lips });
-      console.log(`adx: `, adx);
-      console.log(`atr: `, atr);
-      console.log(`cci: `, cci);
-      console.log(`forceIndex5: `, forceIndex5);
-      console.log(`forceIndex50: `, forceIndex50);
+      // console.log(`adx: `, adx);
+      // console.log(`atr: `, atr);
+      // console.log(`cci: `, cci);
+      // console.log(`forceIndex5: `, forceIndex5);
+      // console.log(`forceIndex50: `, forceIndex50);
       
-      console.log(`macd3: `, macd3);
-      console.log(`macd9: `, macd9);
-      console.log(`macd14: `, macd14);
+      // console.log(`macd3: `, macd3);
+      // console.log(`macd9: `, macd9);
+      // console.log(`macd14: `, macd14);
       console.log(`obv`, obv);
+      console.log(`roc5`, roc5);
+      console.log(`roc10`, roc10);
+      console.log(`roc20`, roc20);
+      console.log(`roc50`, roc50);
+      console.log(`roc100`, roc100);
+      console.log(`roc200`, roc200);
       return false;
       PriceData.create({
         timestamp: Date.now(),
