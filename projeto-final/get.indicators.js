@@ -109,7 +109,10 @@ const PriceDataSchema = new Schema({
     }],
     williamsR: [Number],
     awesomeOscillator: [Number],
-    kst: Number,
+    kst: [{
+      kst: Number,
+      signal: Number,
+    }],
     psar: [Number],
     truerange: Number,
     mfi: Number,
@@ -265,7 +268,18 @@ async function fetchData() {
         ...input, 
         fastPeriod : 5,
         slowPeriod : 34});
-      // const kst = new ti.KST.calculate(input);
+      const kst = new ti.KST.calculate({
+        values      : input.close,
+        ROCPer1     : 10,
+        ROCPer2     : 15,
+        ROCPer3     : 20,
+        ROCPer4     : 30,
+        SMAROCPer1  : 10,
+        SMAROCPer2  : 10,
+        SMAROCPer3  : 10,
+        SMAROCPer4  : 15,
+        signalPeriod: 3
+      });
       // const psar = new ti.PSAR.calculate({...input, step: 0.02, max: 0.2});
       // const truerange = new ti.TrueRange.calculate(input);
       // const mfi = new ti.MFI.calculate(input);
@@ -313,7 +327,7 @@ async function fetchData() {
       // console.log(`roc50`, roc50);
       // console.log(`roc100`, roc100);
       // console.log(`roc200`, roc200);
-      console.log(`awesomeOscillator`, awesomeOscillator);
+      console.log(`kst`, kst);
       return false;
       PriceData.create({
         timestamp: Date.now(),
