@@ -107,8 +107,7 @@ const PriceDataSchema = new Schema({
       k: Number,
       d: Number
     }],
-    williamsR: Number,
-    ad: Number,
+    williamsR: [Number],
     awesomeOscillator: Number,
     kst: Number,
     psar: [Number],
@@ -262,8 +261,10 @@ async function fetchData() {
       const roc200 = new ti.ROC({period: PERIOD200, values: input.close}).getResult();
       const stoch = new ti.Stochastic.calculate({...input, stochasticPeriod: 14, signalPeriod: 3});
       const williamsR = new ti.WilliamsR.calculate(input);
-      // const ad = new ti.AD.calculate(input);
-      // const awesomeOscillator = new ti.AwesomeOscillator.calculate(input);
+      const awesomeOscillator = new ti.AwesomeOscillator.calculate({
+        ...input, 
+        fastPeriod : 5,
+        slowPeriod : 34});
       // const kst = new ti.KST.calculate(input);
       // const psar = new ti.PSAR.calculate({...input, step: 0.02, max: 0.2});
       // const truerange = new ti.TrueRange.calculate(input);
@@ -312,7 +313,7 @@ async function fetchData() {
       // console.log(`roc50`, roc50);
       // console.log(`roc100`, roc100);
       // console.log(`roc200`, roc200);
-      console.log(`williamsR`, williamsR);
+      console.log(`awesomeOscillator`, awesomeOscillator);
       return false;
       PriceData.create({
         timestamp: Date.now(),
