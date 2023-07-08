@@ -212,7 +212,12 @@ async function fetchData() {
       const forceIndex50 = new ti.ForceIndex({...input, period: 50}).getResult()[0];
       const forceIndex100 = new ti.ForceIndex({...input, period: 100}).getResult()[0];
       const forceIndex200 = new ti.ForceIndex({...input, period: 200}).getResult()[0];
-      // const macd = new ti.MACD(input).getResult();
+      const macd3 = new ti.MACD({values: input.close,
+        fastPeriod        : 5,
+        slowPeriod        : 8,
+        signalPeriod      : 3 ,
+        SimpleMAOscillator: false,
+        SimpleMASignal    : false}).getResult();
       // const obv = new ti.OBV.calculate(input);
       // const t3 = new ti.T3(input).getResult();
       // const wema = new ti.WEMA(input).getResult();
@@ -259,6 +264,7 @@ async function fetchData() {
       console.log(`forceIndex5: `, forceIndex5);
       console.log(`forceIndex50: `, forceIndex50);
       
+      console.log(`macd3: `, macd3);
       // console.log(`alligator`, alligator);
       return false;
       PriceData.create({
