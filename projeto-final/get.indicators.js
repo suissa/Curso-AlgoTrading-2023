@@ -89,7 +89,7 @@ const PriceDataSchema = new Schema({
       signal: Number,
       histogram: Number
     }],
-    obv: Number,
+    obv: [Number],
     t3: Number,
     wema: Number,
     roc: Number,
