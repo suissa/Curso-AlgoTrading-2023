@@ -90,8 +90,6 @@ const PriceDataSchema = new Schema({
       histogram: Number
     }],
     obv: [Number],
-    t3: Number,
-    wema: Number,
     roc: Number,
     stoch: {
       k: Number,
@@ -244,8 +242,7 @@ async function fetchData() {
         SimpleMAOscillator: false,
         SimpleMASignal    : false}).getResult();
       const obv = new ti.OBV.calculate(input);
-      // const t3 = new ti.T3(input).getResult();
-      // const wema = new ti.WEMA(input).getResult();
+      // const wema = new ti.WEMA({period: 20, values: input.close}).getResult();
       // const roc = new ti.ROC(input).getResult();
       // const stoch = new ti.Stochastic.calculate(input);
       // const williamsR = new ti.WilliamsR.calculate(input);
@@ -324,8 +321,6 @@ async function fetchData() {
             histogram: Number
           },
           obv,
-          t3,
-          wema,
           roc,
           stoch: {
             k: Number,
