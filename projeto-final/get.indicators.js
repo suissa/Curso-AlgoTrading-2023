@@ -103,10 +103,10 @@ const PriceDataSchema = new Schema({
     roc50: [Number],
     roc100: [Number],
     roc200: [Number],
-    stoch: {
+    stoch: [{
       k: Number,
       d: Number
-    },
+    }],
     williamsR: Number,
     ad: Number,
     awesomeOscillator: Number,
@@ -260,8 +260,8 @@ async function fetchData() {
       const roc50 = new ti.ROC({period: PERIOD50, values: input.close}).getResult();
       const roc100 = new ti.ROC({period: PERIOD100, values: input.close}).getResult();
       const roc200 = new ti.ROC({period: PERIOD200, values: input.close}).getResult();
-      // const stoch = new ti.Stochastic.calculate(input);
-      // const williamsR = new ti.WilliamsR.calculate(input);
+      const stoch = new ti.Stochastic.calculate({...input, stochasticPeriod: 14, signalPeriod: 3});
+      const williamsR = new ti.WilliamsR.calculate(input);
       // const ad = new ti.AD.calculate(input);
       // const awesomeOscillator = new ti.AwesomeOscillator.calculate(input);
       // const kst = new ti.KST.calculate(input);
@@ -305,13 +305,14 @@ async function fetchData() {
       // console.log(`macd3: `, macd3);
       // console.log(`macd9: `, macd9);
       // console.log(`macd14: `, macd14);
-      console.log(`obv`, obv);
-      console.log(`roc5`, roc5);
-      console.log(`roc10`, roc10);
-      console.log(`roc20`, roc20);
-      console.log(`roc50`, roc50);
-      console.log(`roc100`, roc100);
-      console.log(`roc200`, roc200);
+      // console.log(`obv`, obv);
+      // console.log(`roc5`, roc5);
+      // console.log(`roc10`, roc10);
+      // console.log(`roc20`, roc20);
+      // console.log(`roc50`, roc50);
+      // console.log(`roc100`, roc100);
+      // console.log(`roc200`, roc200);
+      console.log(`williamsR`, williamsR);
       return false;
       PriceData.create({
         timestamp: Date.now(),
