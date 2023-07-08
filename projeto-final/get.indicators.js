@@ -108,7 +108,7 @@ const PriceDataSchema = new Schema({
       d: Number
     }],
     williamsR: [Number],
-    awesomeOscillator: Number,
+    awesomeOscillator: [Number],
     kst: Number,
     psar: [Number],
     truerange: Number,
