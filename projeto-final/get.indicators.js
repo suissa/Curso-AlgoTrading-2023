@@ -1,5 +1,31 @@
-const ti = require('technicalindicators');
 const axios = require('axios');
+const ti = require('technicalindicators');
+const Alligator = require("./modules/alligator");
+
+const Binance = require("binance-api-node").default;
+require("dotenv").config();
+
+const API_KEY = process.env.API_KEY_BRAVE;
+const API_SECRET = process.env.API_SECRET_BRAVE;
+
+const client = Binance({
+  apiKey: API_KEY,
+  apiSecret: API_SECRET,
+  futures: true // ativa o modo de futuros
+});
+
+const getCandles = async (symbol = "BTCUSDT", interval = "1m") => {
+  try {
+    const candles = await client.futuresCandles({
+      symbol: symbol,
+      interval: interval
+    });
+    return candles;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -7,11 +33,20 @@ const PriceDataSchema = new Schema({
   timestamp: Number,
   symbol: String,
   price: Number,
-  open: Number,
-  high: Number,
-  low: Number,
-  close: Number,
-  volume: Number,
+  kline: {
+    timestampOpen: Number,
+    open: Number,
+    high: Number,
+    low: Number,
+    close: Number,
+    volume: Number,
+    timestampClose: Number,
+    quoteAssetVolume: Number,
+    numberOfTrades: Number,
+    takerBuyVolume: Number,
+    makerBuyVolume: Number,
+
+  },
   indicators: {
     sma: Number,
     ema: Number,
@@ -22,10 +57,20 @@ const PriceDataSchema = new Schema({
       middle: Number,
       lower: Number
     },
-    adx: Number,
+    alligator: { jaw: Number, teeth: Number, lips: Number },
+    adx: {
+      adx: Number,
+      pdi: Number,
+      mdi: Number
+    },
     atr: Number,
     cci: Number,
-    forceIndex: Number,
+    forceIndex5: Number,
+    forceIndex10: Number,
+    forceIndex20: Number,
+    forceIndex50: Number,
+    forceIndex100: Number,
+    forceIndex200: Number,
     macd: {
       macd: Number,
       signal: Number,
@@ -77,7 +122,7 @@ let input = {
   low: [], // preços baixos
   close: [], // preços de fechamento
   volume: [], // volumes de negociação
-  period: 1, // período para os indicadores
+  period: 14, // período para os indicadores
 };
 
 async function fetchCurrentPrice() {
@@ -97,34 +142,57 @@ async function fetchCurrentPrice() {
   }
 }
 
-async function fetchData() {
+async function getCandlesticks() {
   try {
     const response = await axios.get('https://fapi.binance.com/fapi/v1/klines', {
       params: {
         symbol: 'BTCUSDT',
-        interval: '1m',  // you can adjust the interval as needed
-      }
+        interval: '1m',  // você pode ajustar o intervalo conforme necessário
+        limit: 10,       // número de velas que você deseja obter
+      },
     });
 
-    const price = await fetchCurrentPrice();
+    const candlesticks = response.data;
+    console.log(candlesticks);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-    const data = response.data;
+
+const DATA1 = require('./klines.json')
+async function fetchData() {
+  try {
+
+    // const response = await getCandlesticks();
+
+    // const price = await fetchCurrentPrice();
+
+    const data = DATA1;
     const latestData = data[data.length - 1];
-    console.log(`Latest data: ${latestData}`);
-    const open = parseFloat(latestData[1])
-    const high = parseFloat(latestData[2])
-    const low = parseFloat(latestData[3])
-    const close = parseFloat(latestData[4])
-    const volume = parseFloat(latestData[5])
-    input.open.push(open);
-    input.high.push(high);
-    input.low.push(low);
-    input.close.push(close);
-    input.volume.push(volume);
+    // console.log(` data`, data);
+    // return false;
+    // console.log(`Latest data: ${latestData}`);
+
+    const open = data.map(d => parseFloat(d[1]))
+    const high = data.map(d => parseFloat(d[2]))
+    const low = data.map(d => parseFloat(d[3]))
+    const close = data.map(d => parseFloat(d[4]))
+    const volume = data.map(d => parseFloat(d[5]))
+    input.open = open;
+    input.high = high;
+    input.low = low;
+    input.close = close;
+    input.volume = volume;
 
     // Check if we have enough data to start calculating indicators
     if(input.close.length > input.period) {
-      const sma = new ti.SMA(input.close).getResult();
+      const sma10 = new ti.SMA({period : 10, values : input.close}).getResult()[0];
+      const sma20 = new ti.SMA({period : 20, values : input.close}).getResult()[0];
+      const sma50 = new ti.SMA({period : 50, values : input.close}).getResult()[0];
+      const sma100 = new ti.SMA({period : 100, values : input.close}).getResult()[0];
+      const sma200 = new ti.SMA({period : 200, values : input.close}).getResult()[0];
+
       // const ema = new ti.EMA(input.close).getResult();
       // const wma = new ti.WMA(input.close).getResult();
       // const rsi = new ti.RSI(input.close).getResult();
@@ -132,10 +200,18 @@ async function fetchData() {
         stdDev: 2,
         values: data.slice(-20).map(d => parseFloat(d[4]))
       }).getResult();
-      // const adx = new ti.ADX(input).getResult();
-      // const atr = new ti.ATR(input).getResult();
-      // const cci = new ti.CCI(input).getResult();
-      // const forceIndex = new ti.ForceIndex(input).getResult();
+
+      // const { jaw, teeth, lips } = Alligator(input.close);
+
+      const adx = (new ti.ADX(input).getResult())[0];
+      const atr = (new ti.ATR(input).getResult())[0];
+      const cci = (new ti.CCI({...input, period: 20}).getResult())[0];
+      const forceIndex5 = new ti.ForceIndex({...input, period: 5}).getResult()[0];
+      const forceIndex10 = new ti.ForceIndex({...input, period: 10}).getResult()[0];
+      const forceIndex20 = new ti.ForceIndex({...input, period: 20}).getResult()[0];
+      const forceIndex50 = new ti.ForceIndex({...input, period: 50}).getResult()[0];
+      const forceIndex100 = new ti.ForceIndex({...input, period: 100}).getResult()[0];
+      const forceIndex200 = new ti.ForceIndex({...input, period: 200}).getResult()[0];
       // const macd = new ti.MACD(input).getResult();
       // const obv = new ti.OBV.calculate(input);
       // const t3 = new ti.T3(input).getResult();
@@ -169,9 +245,21 @@ async function fetchData() {
       // const variance = new ti.Variance.calculate(input);
       // const truestrength = new ti.TrueStrength.calculate(input);
       
-      console.log(`SMA: ${sma}`);
+      console.log(`SMA10: ${sma10}`);
+      console.log(`SMA20: ${sma20}`);
+      console.log(`SMA50: ${sma50}`);
+      console.log(`SMA100: ${sma100}`);
+      console.log(`SMA200: ${sma200}`);
       // console.log(`EMA: ${ema}`);
       console.log(`bollingerBands`, bollingerBands);
+      // console.log(`Alligator:`, { jaw, teeth, lips });
+      console.log(`adx: `, adx);
+      console.log(`atr: `, atr);
+      console.log(`cci: `, cci);
+      console.log(`forceIndex5: `, forceIndex5);
+      console.log(`forceIndex50: `, forceIndex50);
+      
+      // console.log(`alligator`, alligator);
       return false;
       PriceData.create({
         timestamp: Date.now(),
@@ -183,11 +271,16 @@ async function fetchData() {
         close,
         volume,
         indicators: {
-          sma,
+          sma10,
+          sma20,
+          sma50,
+          sma100,
+          sma200,
           ema,
           wma,
           rsi,
           bollingerBands: bollingerBands[0],
+          alligator: { jaw, teeth, lips },
           adx,
           atr,
           cci,
