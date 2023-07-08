@@ -1,7 +1,7 @@
 const axios = require('axios');
 const ti = require('technicalindicators');
 const Alligator = require("./modules/alligator");
-
+const PriceModel = require("./modules/model");
 const Binance = require("binance-api-node").default;
 require("dotenv").config();
 
@@ -32,113 +32,6 @@ const getCandles = async (symbol = "BTCUSDT", interval = "1m") => {
     console.error(error);
   }
 }
-
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
-
-const PriceDataSchema = new Schema({
-  timestamp: Number,
-  symbol: String,
-  price: Number,
-  kline: {
-    timestampOpen: Number,
-    open: Number,
-    high: Number,
-    low: Number,
-    close: Number,
-    volume: Number,
-    timestampClose: Number,
-    quoteAssetVolume: Number,
-    numberOfTrades: Number,
-    takerBuyVolume: Number,
-    makerBuyVolume: Number,
-
-  },
-  indicators: {
-    sma: Number,
-    ema: Number,
-    wma: Number,
-    rsi: Number,
-    bollingerBands: {
-      upper: Number,
-      middle: Number,
-      lower: Number
-    },
-    alligator: { jaw: Number, teeth: Number, lips: Number },
-    adx: {
-      adx: Number,
-      pdi: Number,
-      mdi: Number
-    },
-    atr: Number,
-    cci: Number,
-    forceIndex5: Number,
-    forceIndex10: Number,
-    forceIndex20: Number,
-    forceIndex50: Number,
-    forceIndex100: Number,
-    forceIndex200: Number,
-    macd3: [{
-      macd: Number,
-      MACD: Number,
-      signal: Number,
-      histogram: Number
-    }],
-    macd9: [{
-      macd: Number,
-      MACD: Number,
-      signal: Number,
-      histogram: Number
-    }],
-    macd14: [{
-      macd: Number,
-      MACD: Number,
-      signal: Number,
-      histogram: Number
-    }],
-    obv: [Number],
-    roc5: [Number],
-    roc10: [Number],
-    roc20: [Number],
-    roc50: [Number],
-    roc100: [Number],
-    roc200: [Number],
-    stoch: [{
-      k: Number,
-      d: Number
-    }],
-    williamsR: [Number],
-    awesomeOscillator: [Number],
-    kst: [{
-      kst: Number,
-      signal: Number,
-    }],
-    psar: [Number],
-    truerange: Number,
-    mfi: Number,
-    averageGain: Number,
-    averageLoss: Number,
-    sd: Number,
-    pdi: Number,
-    mdi: Number,
-    dx: Number,
-    ao: Number,
-    trix: Number,
-    vwma: Number,
-    vwap: [Number],
-    vosc: Number,
-    apo: Number,
-    linregslope: Number,
-    linregintercept: Number,
-    linreg: Number,
-    stddev: Number,
-    variance: Number,
-    smma: Number,
-    truestrength: Number,
-  }
-});
-
-const PriceData = mongoose.model('PriceData', PriceDataSchema);
 
 
 let input = {
@@ -280,7 +173,7 @@ async function fetchData() {
         SMAROCPer4  : 15,
         signalPeriod: 3
       });
-      // const psar = new ti.PSAR.calculate({...input, step: 0.02, max: 0.2});
+      const psar = new ti.PSAR.calculate({...input, step: 0.02, max: 0.2});
       // const truerange = new ti.TrueRange.calculate(input);
       // const mfi = new ti.MFI.calculate(input);
       // const averageGain = new ti.AverageGain.calculate(input);
@@ -327,9 +220,9 @@ async function fetchData() {
       // console.log(`roc50`, roc50);
       // console.log(`roc100`, roc100);
       // console.log(`roc200`, roc200);
-      console.log(`kst`, kst);
+      console.log(`psar`, psar);
       return false;
-      PriceData.create({
+      PriceModel.create({
         timestamp: Date.now(),
         symbol: "BTCUSDT",
         price,
