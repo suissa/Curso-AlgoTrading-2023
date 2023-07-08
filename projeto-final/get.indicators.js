@@ -71,11 +71,24 @@ const PriceDataSchema = new Schema({
     forceIndex50: Number,
     forceIndex100: Number,
     forceIndex200: Number,
-    macd: {
+    macd3: [{
       macd: Number,
+      MACD: Number,
       signal: Number,
       histogram: Number
-    },
+    }],
+    macd9: [{
+      macd: Number,
+      MACD: Number,
+      signal: Number,
+      histogram: Number
+    }],
+    macd14: [{
+      macd: Number,
+      MACD: Number,
+      signal: Number,
+      histogram: Number
+    }],
     obv: Number,
     t3: Number,
     wema: Number,
@@ -215,10 +228,22 @@ async function fetchData() {
       const macd3 = new ti.MACD({values: input.close,
         fastPeriod        : 5,
         slowPeriod        : 8,
-        signalPeriod      : 3 ,
+        signalPeriod      : 3,
         SimpleMAOscillator: false,
         SimpleMASignal    : false}).getResult();
-      // const obv = new ti.OBV.calculate(input);
+      const macd9 = new ti.MACD({values: input.close,
+        fastPeriod        : 12,
+        slowPeriod        : 26,
+        signalPeriod      : 9,
+        SimpleMAOscillator: false,
+        SimpleMASignal    : false}).getResult();
+      const macd14 = new ti.MACD({values: input.close,
+        fastPeriod        : 20,
+        slowPeriod        : 50,
+        signalPeriod      : 14,
+        SimpleMAOscillator: false,
+        SimpleMASignal    : false}).getResult();
+      const obv = new ti.OBV.calculate(input);
       // const t3 = new ti.T3(input).getResult();
       // const wema = new ti.WEMA(input).getResult();
       // const roc = new ti.ROC(input).getResult();
@@ -265,7 +290,9 @@ async function fetchData() {
       console.log(`forceIndex50: `, forceIndex50);
       
       console.log(`macd3: `, macd3);
-      // console.log(`alligator`, alligator);
+      console.log(`macd9: `, macd9);
+      console.log(`macd14: `, macd14);
+      console.log(`obv`, obv);
       return false;
       PriceData.create({
         timestamp: Date.now(),
