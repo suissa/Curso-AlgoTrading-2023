@@ -182,16 +182,11 @@ async function fetchData() {
         signalPeriod: 3
       });
       const psar = new ti.PSAR.calculate({...input, step: 0.02, max: 0.2});
-      // const truerange = new ti.TrueRange.calculate(input);
-      // const mfi = new ti.MFI.calculate(input);
-      // const averageGain = new ti.AverageGain.calculate(input);
-      // const averageLoss = new ti.AverageLoss.calculate(input);
-      // const sd = new ti.SD.calculate(input);
-      // const pdi = new ti.PDI.calculate(input);
-      // const mdi = new ti.MDI.calculate(input);
-      // const dx = new ti.DX.calculate(input);
-      // const ao = new ti.AbsoluteOscillator.calculate(input);
-      // const trix = new ti.TRIX.calculate(input);
+      const truerange = new ti.TrueRange.calculate(input);
+      const mfi = new ti.MFI.calculate(input);
+      const averageGain = new ti.AverageGain.calculate({...input, values: input.close});
+      const averageLoss = new ti.AverageLoss.calculate({...input, values: input.close});
+      const trix = new ti.TRIX.calculate({...input, period: 18, values: input.close});
       // const vwma = new ti.VWMA.calculate(input);
       // const vwap = new ti.VWAP.calculate(input);
       // const smma = new ti.SMMA.calculate(input);
@@ -214,8 +209,8 @@ async function fetchData() {
       // console.log(`Alligator:`, { jaw, teeth, lips });
       // console.log(`adx: `, adx);
       // console.log(`atr: `, atr);
-      console.log(`ema5: `, ema5);
-      console.log(`ema50: `, ema50);
+      // console.log(`ema5: `, ema5);
+      // console.log(`ema50: `, ema50);
       // console.log(`forceIndex5: `, forceIndex5);
       // console.log(`forceIndex50: `, forceIndex50);
       
@@ -229,8 +224,9 @@ async function fetchData() {
       // console.log(`roc50`, roc50);
       // console.log(`roc100`, roc100);
       // console.log(`roc200`, roc200);
-      // console.log(`psar`, psar);
-      // return false;
+      console.log(`trix`, trix);
+
+      return false;
       PriceModel.create({
         timestamp: Date.now(),
         symbol: "BTCUSDT",
@@ -289,9 +285,9 @@ async function fetchData() {
           awesomeOscillator,
           kst,
           psar,
-          // mfi,
-          // averageGain,
-          // averageLoss,
+          mfi,
+          averageGain,
+          averageLoss,
           // sd,
           // pdi,
           // mdi,
