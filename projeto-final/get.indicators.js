@@ -128,7 +128,7 @@ async function fetchData() {
       const wma100 = new ti.WMA({...input, values: input.close, period: PERIOD100}).getResult();
       const wma200 = new ti.WMA({...input, values: input.close, period: PERIOD200}).getResult();
 
-      // const rsi = new ti.RSI(input.close).getResult();
+      const rsi = new ti.RSI({...input, values: input.close}).getResult();
       const bollingerBands = new ti.BollingerBands({...input, period: 20,
         stdDev: 2,
         values: data.slice(-20).map(d => parseFloat(d[4]))
@@ -203,15 +203,15 @@ async function fetchData() {
       const standardDeviation50 = new ti.SD.calculate({values: input.close, period: PERIOD50});
       const standardDeviation100 = new ti.SD.calculate({values: input.close, period: PERIOD100});
       const standardDeviation200 = new ti.SD.calculate({values: input.close, period: PERIOD200});
-
-      // console.log(`obv`, obv);
+      const volumeProfile = new ti.VolumeProfile.calculate({...input, noOfBars: 12});
+      console.log(`rsi`, rsi);
       // console.log(`standardDeviation5`, standardDeviation5);
       // console.log(`standardDeviation10`, standardDeviation10);
       // console.log(`standardDeviation20`, standardDeviation20);
       // console.log(`standardDeviation50`, standardDeviation50);
       // console.log(`standardDeviation100`, standardDeviation100);
       // console.log(`standardDeviation200`, standardDeviation200);
-      console.log(`alligator`, { jaw, teeth, lips });
+      // console.log(`alligator`, { jaw, teeth, lips });
 
       return false;
       PriceModel.create({
@@ -249,7 +249,7 @@ async function fetchData() {
           wma50,
           wma100,
           wma200,
-          // rsi,
+          rsi,
           bollingerBands: bollingerBands[0],
           alligator: { jaw, teeth, lips },
           adl,
@@ -291,6 +291,7 @@ async function fetchData() {
           standardDeviation100,
           standardDeviation200,
           truerange,
+          volumeProfile
         }
       });
     }

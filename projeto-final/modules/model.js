@@ -122,15 +122,13 @@ const PriceDataSchema = new Schema({
       "spanA": Number,
       "spanB": Number
     }],
-    vosc: Number,
-    apo: Number,
-    linregslope: Number,
-    linregintercept: Number,
-    linreg: Number,
-    stddev: Number,
-    variance: Number,
-    smma: Number,
-    truestrength: Number,
+    volumeProfile: [{
+      "bearishVolume": Number,
+      "bullishVolume": Number,
+      "rangeEnd": Number,
+      "rangeStart": Number,
+      "totalVolume": Number
+    }]
   }
 });
 
