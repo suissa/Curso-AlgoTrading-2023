@@ -52,7 +52,12 @@ const PriceDataSchema = new Schema({
     ema50: [Number],
     ema100: [Number],
     ema200: [Number],
-    wma: [Number],
+    wma5: [Number],
+    wma10: [Number],
+    wma20: [Number],
+    wma50: [Number],
+    wma100: [Number],
+    wma200: [Number],
     rsi: [Number],
     bollingerBands: {
       upper: Number,
