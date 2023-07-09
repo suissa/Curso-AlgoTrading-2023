@@ -205,7 +205,7 @@ async function fetchData() {
       const standardDeviation100 = new ti.SD.calculate({values: input.close, period: PERIOD100});
       const standardDeviation200 = new ti.SD.calculate({values: input.close, period: PERIOD200});
       const volumeProfile = new ti.VolumeProfile.calculate({...input, noOfBars: 12});
-      // console.log(`rsi`, rsi);
+      console.log(`bollingerBands`, bollingerBands);
       // console.log(`standardDeviation5`, standardDeviation5);
       // console.log(`standardDeviation10`, standardDeviation10);
       // console.log(`standardDeviation20`, standardDeviation20);
@@ -252,7 +252,7 @@ async function fetchData() {
           wma100,
           wma200,
           rsi,
-          bollingerBands: bollingerBands[0],
+          bollingerBands,
           alligator: { jaw, teeth, lips },
           adl,
           adx,
@@ -263,7 +263,6 @@ async function fetchData() {
           forceIndex20,
           forceIndex50,
           forceIndex100,
-          forceIndex200,
           macd3,
           macd9,
           macd14,
@@ -276,7 +275,6 @@ async function fetchData() {
           roc200,
           stoch,
           williamsR,
-          // ad,
           awesomeOscillator,
           kst,
           psar,

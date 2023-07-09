@@ -59,11 +59,11 @@ const PriceDataSchema = new Schema({
     wma100: [Number],
     wma200: [Number],
     rsi: [Number],
-    bollingerBands: {
+    bollingerBands: [{
       upper: Number,
       middle: Number,
       lower: Number
-    },
+    }],
     alligator: { jaw: [Number], teeth: [Number], lips: [Number] },
     adl: [Number],
     adx: [{
@@ -78,7 +78,6 @@ const PriceDataSchema = new Schema({
     forceIndex20: [Number],
     forceIndex50: [Number],
     forceIndex100: [Number],
-    forceIndex200: [Number],
     macd3: [{
       macd: Number,
       MACD: Number,
