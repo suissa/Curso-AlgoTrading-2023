@@ -196,6 +196,7 @@ async function fetchData() {
       const trix = new ti.TRIX.calculate({...input, period: 18, values: input.close});
 
       const vwap = new ti.VWAP.calculate(input);
+      const ichimokucloud = new ti.IchimokuCloud.calculate(input);
       // const smma = new ti.SMMA.calculate(input);
       // const vosc = new ti.VOSC.calculate(input);
       // const apo = new ti.APO.calculate(input);
@@ -231,7 +232,7 @@ async function fetchData() {
       // console.log(`wma50`, wma50);
       // console.log(`wma100`, wma100);
       // console.log(`wma200`, wma200);
-      console.log(`vwap`, vwap);
+      console.log(`ichimokucloud`, ichimokucloud);
 
       return false;
       PriceModel.create({
@@ -301,8 +302,8 @@ async function fetchData() {
           averageGain,
           averageLoss,
           trix,
-
           vwap,
+          ichimokucloud,
           // vosc,
           // apo,
           // linregslope,

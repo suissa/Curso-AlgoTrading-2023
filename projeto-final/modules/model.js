@@ -115,6 +115,12 @@ const PriceDataSchema = new Schema({
     trix: [Number],
     vwma: Number,
     vwap: [Number],
+    ichimokucloud: [{
+      "conversion": Number,
+      "base": Number,
+      "spanA": Number,
+      "spanB": Number
+    }],
     vosc: Number,
     apo: Number,
     linregslope: Number,
