@@ -1,6 +1,26 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const mongoDBURL = 'mongodb://localhost/price-indicators';
+
+mongoose.connect(mongoDBURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Conexão com o MongoDB estabelecida com sucesso!');
+  })
+  .catch((error) => {
+    console.error('Erro ao conectar com o MongoDB:', error);
+  });
+
+// Evento de erro de conexão
+mongoose.connection.on('error', (error) => {
+  console.error('Erro na conexão com o MongoDB:', error);
+});
+
+// Evento de desconexão
+mongoose.connection.on('disconnected', () => {
+  console.log('Desconectado do MongoDB');
+});
+
 const PriceDataSchema = new Schema({
   timestamp: Number,
   symbol: String,
@@ -20,8 +40,18 @@ const PriceDataSchema = new Schema({
 
   },
   indicators: {
-    sma: [Number],
-    ema: [Number],
+    sma5: [Number],
+    sma10: [Number],
+    sma20: [Number],
+    sma50: [Number],
+    sma100: [Number],
+    sma200: [Number],
+    ema5: [Number],
+    ema10: [Number],
+    ema20: [Number],
+    ema50: [Number],
+    ema100: [Number],
+    ema200: [Number],
     wma: [Number],
     rsi: [Number],
     bollingerBands: {

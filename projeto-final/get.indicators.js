@@ -84,11 +84,11 @@ async function fetchData() {
 
     // const response = await getCandlesticks();
 
-    // const price = await fetchCurrentPrice();
+    const price = await fetchCurrentPrice();
 
     const data = DATA1;
     const latestData = data[data.length - 1];
-    // console.log(` data`, data);
+    console.log(` price`, price);
     // return false;
     // console.log(`Latest data: ${latestData}`);
 
@@ -102,6 +102,7 @@ async function fetchData() {
     input.low = low;
     input.close = close;
     input.volume = volume;
+    input.values = close;
 
     // Check if we have enough data to start calculating indicators
     if(input.close.length > input.period) {
@@ -111,7 +112,12 @@ async function fetchData() {
       const sma100 = new ti.SMA({period : 100, values : input.close}).getResult();
       const sma200 = new ti.SMA({period : 200, values : input.close}).getResult();
 
-      // const ema = new ti.EMA(input.close).getResult();
+      const ema5 = new ti.EMA({...input, period: PERIOD5}).getResult();
+      const ema10 = new ti.EMA({...input, period: PERIOD10}).getResult();
+      const ema20 = new ti.EMA({...input, period: PERIOD20}).getResult();
+      const ema50 = new ti.EMA({...input, period: PERIOD50}).getResult();
+      const ema100 = new ti.EMA({...input, period: PERIOD100}).getResult();
+      const ema200 = new ti.EMA({...input, period: PERIOD200}).getResult();
       // const wma = new ti.WMA(input.close).getResult();
       // const rsi = new ti.RSI(input.close).getResult();
       const bollingerBands = new ti.BollingerBands({...input, period: 20,
@@ -206,7 +212,8 @@ async function fetchData() {
       // console.log(`Alligator:`, { jaw, teeth, lips });
       // console.log(`adx: `, adx);
       // console.log(`atr: `, atr);
-      console.log(`cci: `, cci);
+      console.log(`ema5: `, ema5);
+      console.log(`ema50: `, ema50);
       // console.log(`forceIndex5: `, forceIndex5);
       // console.log(`forceIndex50: `, forceIndex50);
       
@@ -226,11 +233,19 @@ async function fetchData() {
         timestamp: Date.now(),
         symbol: "BTCUSDT",
         price,
-        open,
-        high,
-        low,
-        close,
-        volume,
+        kline: {
+          timestampOpen: Number,
+          open: Number,
+          high: Number,
+          low: Number,
+          close: Number,
+          volume: Number,
+          timestampClose: Number,
+          quoteAssetVolume: Number,
+          numberOfTrades: Number,
+          takerBuyVolume: Number,
+          makerBuyVolume: Number,
+        },
         indicators: {
           sma10,
           sma20,
@@ -292,4 +307,4 @@ async function fetchData() {
 }
 
 // Fetch data every 10 seconds
-setInterval(fetchData, 1 * 1000);
+setInterval(fetchData, 10 * 1000);
