@@ -59,7 +59,7 @@ const PriceDataSchema = new Schema({
       middle: Number,
       lower: Number
     },
-    alligator: { jaw: Number, teeth: Number, lips: Number },
+    alligator: { jaw: [Number], teeth: [Number], lips: [Number] },
     adl: [Number],
     adx: [{
       adx: Number,

@@ -134,7 +134,7 @@ async function fetchData() {
         values: data.slice(-20).map(d => parseFloat(d[4]))
       }).getResult();
 
-      // const { jaw, teeth, lips } = Alligator(input.close);
+      const { jaw, teeth, lips } = Alligator(input.close);
 
       const adl = new ti.ADL(input).getResult();
       const adx = new ti.ADX(input).getResult();
@@ -211,7 +211,7 @@ async function fetchData() {
       // console.log(`standardDeviation50`, standardDeviation50);
       // console.log(`standardDeviation100`, standardDeviation100);
       // console.log(`standardDeviation200`, standardDeviation200);
-      console.log(`adl`, adl);
+      console.log(`alligator`, { jaw, teeth, lips });
 
       return false;
       PriceModel.create({
@@ -251,7 +251,7 @@ async function fetchData() {
           wma200,
           // rsi,
           bollingerBands: bollingerBands[0],
-          // alligator: { jaw, teeth, lips },
+          alligator: { jaw, teeth, lips },
           adl,
           adx,
           atr,
