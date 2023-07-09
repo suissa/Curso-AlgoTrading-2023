@@ -89,10 +89,10 @@ async function fetchData() {
     const data = response;
     const latestData = data[data.length - 1];
     console.log(` price`, price);
-    console.log(` data`, data);
+    // console.log(` data`, data);
     console.log(` data.length`, data.length);
     // return false;
-    console.log(`Latest data: ${latestData}`);
+    // console.log(`Latest data: ${latestData}`);
 
     const open = data.map(d => parseFloat(d[1]))
     const high = data.map(d => parseFloat(d[2]))
@@ -204,7 +204,7 @@ async function fetchData() {
       const standardDeviation100 = new ti.SD.calculate({values: input.close, period: PERIOD100});
       const standardDeviation200 = new ti.SD.calculate({values: input.close, period: PERIOD200});
       const volumeProfile = new ti.VolumeProfile.calculate({...input, noOfBars: 12});
-      console.log(`rsi`, rsi);
+      // console.log(`rsi`, rsi);
       // console.log(`standardDeviation5`, standardDeviation5);
       // console.log(`standardDeviation10`, standardDeviation10);
       // console.log(`standardDeviation20`, standardDeviation20);
@@ -213,8 +213,8 @@ async function fetchData() {
       // console.log(`standardDeviation200`, standardDeviation200);
       // console.log(`alligator`, { jaw, teeth, lips });
 
-      return false;
-      PriceModel.create({
+      // return false;
+      const result = await PriceModel.create({
         timestamp: Date.now(),
         symbol: "BTCUSDT",
         price,
@@ -294,6 +294,7 @@ async function fetchData() {
           volumeProfile
         }
       });
+      console.log(`result`, result);
     }
   } catch (error) {
     console.error(`Error fetching data: ${error}`);
