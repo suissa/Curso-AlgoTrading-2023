@@ -108,11 +108,12 @@ async function fetchData() {
 
     // Check if we have enough data to start calculating indicators
     if(input.close.length > input.period) {
-      const sma10 = new ti.SMA({period : 10, values : input.close}).getResult();
-      const sma20 = new ti.SMA({period : 20, values : input.close}).getResult();
-      const sma50 = new ti.SMA({period : 50, values : input.close}).getResult();
-      const sma100 = new ti.SMA({period : 100, values : input.close}).getResult();
-      const sma200 = new ti.SMA({period : 200, values : input.close}).getResult();
+      const sma5 = new ti.SMA({period : PERIOD5, values : input.close}).getResult();
+      const sma10 = new ti.SMA({period : PERIOD10, values : input.close}).getResult();
+      const sma20 = new ti.SMA({period : PERIOD20, values : input.close}).getResult();
+      const sma50 = new ti.SMA({period : PERIOD50, values : input.close}).getResult();
+      const sma100 = new ti.SMA({period : PERIOD100, values : input.close}).getResult();
+      const sma200 = new ti.SMA({period : PERIOD200, values : input.close}).getResult();
 
       const ema5 = new ti.EMA({...input, period: PERIOD5}).getResult();
       const ema10 = new ti.EMA({...input, period: PERIOD10}).getResult();
@@ -232,6 +233,7 @@ async function fetchData() {
           makerBuyVolume: latestData[10],
         },
         indicators: {
+          sma5,
           sma10,
           sma20,
           sma50,
