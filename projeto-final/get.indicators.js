@@ -195,7 +195,7 @@ async function fetchData() {
       const averageLoss = new ti.AverageLoss.calculate({...input, values: input.close});
       const trix = new ti.TRIX.calculate({...input, period: 18, values: input.close});
 
-      // const vwap = new ti.VWAP.calculate(input);
+      const vwap = new ti.VWAP.calculate(input);
       // const smma = new ti.SMMA.calculate(input);
       // const vosc = new ti.VOSC.calculate(input);
       // const apo = new ti.APO.calculate(input);
@@ -225,13 +225,13 @@ async function fetchData() {
       // console.log(`macd9: `, macd9);
       // console.log(`macd14: `, macd14);
       // console.log(`obv`, obv);
-      console.log(`wma5`, wma5);
-      console.log(`wma10`, wma10);
-      console.log(`wma20`, wma20);
-      console.log(`wma50`, wma50);
-      console.log(`wma100`, wma100);
-      console.log(`wma200`, wma200);
-      // console.log(`trix`, trix);
+      // console.log(`wma5`, wma5);
+      // console.log(`wma10`, wma10);
+      // console.log(`wma20`, wma20);
+      // console.log(`wma50`, wma50);
+      // console.log(`wma100`, wma100);
+      // console.log(`wma200`, wma200);
+      console.log(`vwap`, vwap);
 
       return false;
       PriceModel.create({
