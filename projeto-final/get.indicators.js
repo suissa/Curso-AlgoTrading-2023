@@ -52,7 +52,7 @@ async function fetchCurrentPrice() {
     });
 
     const price = parseFloat(response.data.price);
-    console.log(`Current BTCUSDT price: ${price}`);
+    // console.log(`Current BTCUSDT price: ${price}`);
 
     return price;
   } catch (error) {
@@ -66,12 +66,13 @@ async function getCandlesticks() {
       params: {
         symbol: 'BTCUSDT',
         interval: '1m',  // você pode ajustar o intervalo conforme necessário
-        limit: 10,       // número de velas que você deseja obter
+        limit: 200,       // número de velas que você deseja obter
       },
     });
 
     const candlesticks = response.data;
-    console.log(candlesticks);
+    console.log({candlesticks});
+    return candlesticks;
   } catch (error) {
     console.error(error);
   }
@@ -82,15 +83,16 @@ const DATA1 = require('./klines.json')
 async function fetchData() {
   try {
 
-    // const response = await getCandlesticks();
-
+    const response = await getCandlesticks();
     const price = await fetchCurrentPrice();
 
-    const data = DATA1;
+    const data = response;
     const latestData = data[data.length - 1];
     console.log(` price`, price);
+    console.log(` data`, data);
+    console.log(` data.length`, data.length);
     // return false;
-    // console.log(`Latest data: ${latestData}`);
+    console.log(`Latest data: ${latestData}`);
 
     const open = data.map(d => parseFloat(d[1]))
     const high = data.map(d => parseFloat(d[2]))
@@ -228,23 +230,23 @@ async function fetchData() {
       // console.log(`roc100`, roc100);
       // console.log(`roc200`, roc200);
       // console.log(`psar`, psar);
-      return false;
+      // return false;
       PriceModel.create({
         timestamp: Date.now(),
         symbol: "BTCUSDT",
         price,
         kline: {
-          timestampOpen: Number,
-          open: Number,
-          high: Number,
-          low: Number,
-          close: Number,
-          volume: Number,
-          timestampClose: Number,
-          quoteAssetVolume: Number,
-          numberOfTrades: Number,
-          takerBuyVolume: Number,
-          makerBuyVolume: Number,
+          timestampOpen: latestData[0],
+          open: latestData[1],
+          high: latestData[2],
+          low: latestData[3],
+          close: latestData[4],
+          volume: latestData[5],
+          timestampClose: latestData[6],
+          quoteAssetVolume: latestData[7],
+          numberOfTrades: latestData[8],
+          takerBuyVolume: latestData[9],
+          makerBuyVolume: latestData[10],
         },
         indicators: {
           sma10,
@@ -252,52 +254,61 @@ async function fetchData() {
           sma50,
           sma100,
           sma200,
-          ema,
-          wma,
-          rsi,
+          ema5,
+          ema10,
+          ema20,
+          ema50,
+          ema100,
+          ema200,
+          // wma,
+          // rsi,
           bollingerBands: bollingerBands[0],
-          alligator: { jaw, teeth, lips },
+          // alligator: { jaw, teeth, lips },
           adx,
           atr,
           cci,
-          forceIndex,
-          macd: {
-            macd: Number,
-            signal: Number,
-            histogram: Number
-          },
+          forceIndex5,
+          forceIndex10,
+          forceIndex20,
+          forceIndex50,
+          forceIndex100,
+          forceIndex200,
+          macd3,
+          macd9,
+          macd14,
           obv,
-          roc,
-          stoch: {
-            k: Number,
-            d: Number
-          },
+          roc5,
+          roc10,
+          roc20,
+          roc50,
+          roc100,
+          roc200,
+          stoch,
           williamsR,
-          ad,
+          // ad,
           awesomeOscillator,
           kst,
           psar,
-          truerange,
-          mfi,
-          averageGain,
-          averageLoss,
-          sd,
-          pdi,
-          mdi,
-          dx,
-          ao,
-          trix,
-          vwma,
-          vwap,
-          vosc,
-          apo,
-          linregslope,
-          linregintercept,
-          linreg,
-          stddev,
-          variance,
-          smma,
-          truestrength,
+          // mfi,
+          // averageGain,
+          // averageLoss,
+          // sd,
+          // pdi,
+          // mdi,
+          // dx,
+          // ao,
+          // trix,
+          // vwma,
+          // vwap,
+          // vosc,
+          // apo,
+          // linregslope,
+          // linregintercept,
+          // linreg,
+          // stddev,
+          // variance,
+          // smma,
+          // truestrength,
         }
       });
     }
