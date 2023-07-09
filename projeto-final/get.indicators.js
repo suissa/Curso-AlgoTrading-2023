@@ -136,6 +136,7 @@ async function fetchData() {
 
       // const { jaw, teeth, lips } = Alligator(input.close);
 
+      const adl = new ti.ADL(input).getResult();
       const adx = new ti.ADX(input).getResult();
       const atr = new ti.ATR(input).getResult();
       const cci = new ti.CCI({...input, period: 20}).getResult();
@@ -194,45 +195,23 @@ async function fetchData() {
       const averageGain = new ti.AverageGain.calculate({...input, values: input.close});
       const averageLoss = new ti.AverageLoss.calculate({...input, values: input.close});
       const trix = new ti.TRIX.calculate({...input, period: 18, values: input.close});
-
       const vwap = new ti.VWAP.calculate(input);
       const ichimokucloud = new ti.IchimokuCloud.calculate(input);
-      // const smma = new ti.SMMA.calculate(input);
-      // const vosc = new ti.VOSC.calculate(input);
-      // const apo = new ti.APO.calculate(input);
-      // const linregslope = new ti.LinRegSlope.calculate(input);
-      // const linregintercept = new ti.LinRegIntercept.calculate(input);
-      // const linreg = new ti.LinReg.calculate(input);
-      // const stddev = new ti.StdDev.calculate(input);
-      // const variance = new ti.Variance.calculate(input);
-      // const truestrength = new ti.TrueStrength.calculate(input);
-      
-      // console.log(`SMA10: ${sma10}`);
-      // console.log(`SMA20: ${sma20}`);
-      // console.log(`SMA50: ${sma50}`);
-      // console.log(`SMA100: ${sma100}`);
-      // console.log(`SMA200: ${sma200}`);
-      // // console.log(`EMA: ${ema}`);
-      // console.log(`bollingerBands`, bollingerBands);
-      // console.log(`Alligator:`, { jaw, teeth, lips });
-      // console.log(`adx: `, adx);
-      // console.log(`atr: `, atr);
-      // console.log(`ema5: `, ema5);
-      // console.log(`ema50: `, ema50);
-      // console.log(`forceIndex5: `, forceIndex5);
-      // console.log(`forceIndex50: `, forceIndex50);
-      
-      // console.log(`macd3: `, macd3);
-      // console.log(`macd9: `, macd9);
-      // console.log(`macd14: `, macd14);
+      const standardDeviation5 = new ti.SD.calculate({values: input.close, period: PERIOD5});
+      const standardDeviation10 = new ti.SD.calculate({values: input.close, period: PERIOD10});
+      const standardDeviation20 = new ti.SD.calculate({values: input.close, period: PERIOD20});
+      const standardDeviation50 = new ti.SD.calculate({values: input.close, period: PERIOD50});
+      const standardDeviation100 = new ti.SD.calculate({values: input.close, period: PERIOD100});
+      const standardDeviation200 = new ti.SD.calculate({values: input.close, period: PERIOD200});
+
       // console.log(`obv`, obv);
-      // console.log(`wma5`, wma5);
-      // console.log(`wma10`, wma10);
-      // console.log(`wma20`, wma20);
-      // console.log(`wma50`, wma50);
-      // console.log(`wma100`, wma100);
-      // console.log(`wma200`, wma200);
-      console.log(`ichimokucloud`, ichimokucloud);
+      // console.log(`standardDeviation5`, standardDeviation5);
+      // console.log(`standardDeviation10`, standardDeviation10);
+      // console.log(`standardDeviation20`, standardDeviation20);
+      // console.log(`standardDeviation50`, standardDeviation50);
+      // console.log(`standardDeviation100`, standardDeviation100);
+      // console.log(`standardDeviation200`, standardDeviation200);
+      console.log(`adl`, adl);
 
       return false;
       PriceModel.create({
@@ -273,6 +252,7 @@ async function fetchData() {
           // rsi,
           bollingerBands: bollingerBands[0],
           // alligator: { jaw, teeth, lips },
+          adl,
           adx,
           atr,
           cci,
@@ -304,15 +284,13 @@ async function fetchData() {
           trix,
           vwap,
           ichimokucloud,
-          // vosc,
-          // apo,
-          // linregslope,
-          // linregintercept,
-          // linreg,
-          // stddev,
-          // variance,
-          // smma,
-          // truestrength,
+          standardDeviation5,
+          standardDeviation10,
+          standardDeviation20,
+          standardDeviation50,
+          standardDeviation100,
+          standardDeviation200,
+          truerange,
         }
       });
     }
