@@ -120,7 +120,14 @@ async function fetchData() {
       const ema50 = new ti.EMA({...input, period: PERIOD50}).getResult();
       const ema100 = new ti.EMA({...input, period: PERIOD100}).getResult();
       const ema200 = new ti.EMA({...input, period: PERIOD200}).getResult();
-      // const wma = new ti.WMA(input.close).getResult();
+
+      const wma5 = new ti.WMA({...input, values: input.close, period: PERIOD5}).getResult();
+      const wma10 = new ti.WMA({...input, values: input.close, period: PERIOD10}).getResult();
+      const wma20 = new ti.WMA({...input, values: input.close, period: PERIOD20}).getResult();
+      const wma50 = new ti.WMA({...input, values: input.close, period: PERIOD50}).getResult();
+      const wma100 = new ti.WMA({...input, values: input.close, period: PERIOD100}).getResult();
+      const wma200 = new ti.WMA({...input, values: input.close, period: PERIOD200}).getResult();
+
       // const rsi = new ti.RSI(input.close).getResult();
       const bollingerBands = new ti.BollingerBands({...input, period: 20,
         stdDev: 2,
@@ -187,7 +194,7 @@ async function fetchData() {
       const averageGain = new ti.AverageGain.calculate({...input, values: input.close});
       const averageLoss = new ti.AverageLoss.calculate({...input, values: input.close});
       const trix = new ti.TRIX.calculate({...input, period: 18, values: input.close});
-      // const vwma = new ti.VWMA.calculate(input);
+
       // const vwap = new ti.VWAP.calculate(input);
       // const smma = new ti.SMMA.calculate(input);
       // const vosc = new ti.VOSC.calculate(input);
@@ -218,13 +225,13 @@ async function fetchData() {
       // console.log(`macd9: `, macd9);
       // console.log(`macd14: `, macd14);
       // console.log(`obv`, obv);
-      // console.log(`roc5`, roc5);
-      // console.log(`roc10`, roc10);
-      // console.log(`roc20`, roc20);
-      // console.log(`roc50`, roc50);
-      // console.log(`roc100`, roc100);
-      // console.log(`roc200`, roc200);
-      console.log(`trix`, trix);
+      console.log(`wma5`, wma5);
+      console.log(`wma10`, wma10);
+      console.log(`wma20`, wma20);
+      console.log(`wma50`, wma50);
+      console.log(`wma100`, wma100);
+      console.log(`wma200`, wma200);
+      // console.log(`trix`, trix);
 
       return false;
       PriceModel.create({
@@ -256,7 +263,12 @@ async function fetchData() {
           ema50,
           ema100,
           ema200,
-          // wma,
+          wma5,
+          wma10,
+          wma20,
+          wma50,
+          wma100,
+          wma200,
           // rsi,
           bollingerBands: bollingerBands[0],
           // alligator: { jaw, teeth, lips },
@@ -288,14 +300,9 @@ async function fetchData() {
           mfi,
           averageGain,
           averageLoss,
-          // sd,
-          // pdi,
-          // mdi,
-          // dx,
-          // ao,
-          // trix,
-          // vwma,
-          // vwap,
+          trix,
+
+          vwap,
           // vosc,
           // apo,
           // linregslope,
