@@ -105,11 +105,11 @@ async function fetchData() {
 
     // Check if we have enough data to start calculating indicators
     if(input.close.length > input.period) {
-      const sma10 = new ti.SMA({period : 10, values : input.close}).getResult()[0];
-      const sma20 = new ti.SMA({period : 20, values : input.close}).getResult()[0];
-      const sma50 = new ti.SMA({period : 50, values : input.close}).getResult()[0];
-      const sma100 = new ti.SMA({period : 100, values : input.close}).getResult()[0];
-      const sma200 = new ti.SMA({period : 200, values : input.close}).getResult()[0];
+      const sma10 = new ti.SMA({period : 10, values : input.close}).getResult();
+      const sma20 = new ti.SMA({period : 20, values : input.close}).getResult();
+      const sma50 = new ti.SMA({period : 50, values : input.close}).getResult();
+      const sma100 = new ti.SMA({period : 100, values : input.close}).getResult();
+      const sma200 = new ti.SMA({period : 200, values : input.close}).getResult();
 
       // const ema = new ti.EMA(input.close).getResult();
       // const wma = new ti.WMA(input.close).getResult();
@@ -121,15 +121,15 @@ async function fetchData() {
 
       // const { jaw, teeth, lips } = Alligator(input.close);
 
-      const adx = (new ti.ADX(input).getResult())[0];
-      const atr = (new ti.ATR(input).getResult())[0];
-      const cci = (new ti.CCI({...input, period: 20}).getResult())[0];
-      const forceIndex5 = new ti.ForceIndex({...input, period: PERIOD5}).getResult()[0];
-      const forceIndex10 = new ti.ForceIndex({...input, period: PERIOD10}).getResult()[0];
-      const forceIndex20 = new ti.ForceIndex({...input, period: PERIOD20}).getResult()[0];
-      const forceIndex50 = new ti.ForceIndex({...input, period: PERIOD50}).getResult()[0];
-      const forceIndex100 = new ti.ForceIndex({...input, period: PERIOD100}).getResult()[0];
-      const forceIndex200 = new ti.ForceIndex({...input, period: PERIOD200}).getResult()[0];
+      const adx = new ti.ADX(input).getResult();
+      const atr = new ti.ATR(input).getResult();
+      const cci = new ti.CCI({...input, period: 20}).getResult();
+      const forceIndex5 = new ti.ForceIndex({...input, period: PERIOD5}).getResult();
+      const forceIndex10 = new ti.ForceIndex({...input, period: PERIOD10}).getResult();
+      const forceIndex20 = new ti.ForceIndex({...input, period: PERIOD20}).getResult();
+      const forceIndex50 = new ti.ForceIndex({...input, period: PERIOD50}).getResult();
+      const forceIndex100 = new ti.ForceIndex({...input, period: PERIOD100}).getResult();
+      const forceIndex200 = new ti.ForceIndex({...input, period: PERIOD200}).getResult();
       const macd3 = new ti.MACD({values: input.close,
         fastPeriod        : 5,
         slowPeriod        : 8,
@@ -206,7 +206,7 @@ async function fetchData() {
       // console.log(`Alligator:`, { jaw, teeth, lips });
       // console.log(`adx: `, adx);
       // console.log(`atr: `, atr);
-      // console.log(`cci: `, cci);
+      console.log(`cci: `, cci);
       // console.log(`forceIndex5: `, forceIndex5);
       // console.log(`forceIndex50: `, forceIndex50);
       
@@ -220,7 +220,7 @@ async function fetchData() {
       // console.log(`roc50`, roc50);
       // console.log(`roc100`, roc100);
       // console.log(`roc200`, roc200);
-      console.log(`psar`, psar);
+      // console.log(`psar`, psar);
       return false;
       PriceModel.create({
         timestamp: Date.now(),

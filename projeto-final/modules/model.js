@@ -20,29 +20,29 @@ const PriceDataSchema = new Schema({
 
   },
   indicators: {
-    sma: Number,
-    ema: Number,
-    wma: Number,
-    rsi: Number,
+    sma: [Number],
+    ema: [Number],
+    wma: [Number],
+    rsi: [Number],
     bollingerBands: {
       upper: Number,
       middle: Number,
       lower: Number
     },
     alligator: { jaw: Number, teeth: Number, lips: Number },
-    adx: {
+    adx: [{
       adx: Number,
       pdi: Number,
       mdi: Number
-    },
-    atr: Number,
-    cci: Number,
-    forceIndex5: Number,
-    forceIndex10: Number,
-    forceIndex20: Number,
-    forceIndex50: Number,
-    forceIndex100: Number,
-    forceIndex200: Number,
+    }],
+    atr: [Number],
+    cci: [Number],
+    forceIndex5: [Number],
+    forceIndex10: [Number],
+    forceIndex20: [Number],
+    forceIndex50: [Number],
+    forceIndex100: [Number],
+    forceIndex200: [Number],
     macd3: [{
       macd: Number,
       MACD: Number,
