@@ -205,16 +205,7 @@ async function fetchData() {
       const standardDeviation100 = new ti.SD.calculate({values: input.close, period: PERIOD100});
       const standardDeviation200 = new ti.SD.calculate({values: input.close, period: PERIOD200});
       const volumeProfile = new ti.VolumeProfile.calculate({...input, noOfBars: 12});
-      console.log(`bollingerBands`, bollingerBands);
-      // console.log(`standardDeviation5`, standardDeviation5);
-      // console.log(`standardDeviation10`, standardDeviation10);
-      // console.log(`standardDeviation20`, standardDeviation20);
-      // console.log(`standardDeviation50`, standardDeviation50);
-      // console.log(`standardDeviation100`, standardDeviation100);
-      // console.log(`standardDeviation200`, standardDeviation200);
-      // console.log(`alligator`, { jaw, teeth, lips });
-
-      // return false;
+      
       const result = await PriceModel.create({
         timestamp: Date.now(),
         symbol: "BTCUSDT",
