@@ -15,6 +15,8 @@ const STRATEGY_DIFF_TO_CLOSE = 30;
 const STRATEGY_DIFF_TO_AVERAGE = 50;
 const STRATEGY_MAX_AVERAGE_PRICES = 5;
 const STRATEGY_VALUE_TO_STOP_LOSS = 100;
+const STRATEGY_HAS_AVERAGE_PRICE = false;
+const STRATEGY_HAS_STOP_LOSS = true;
 const STRATEGY_SYMBOL = "BTCUSDT";
 const STRATEGY_INTERVAL = "5m";
 const STRATEGY_QUANTITY = 0.001;
@@ -252,7 +254,7 @@ const runBot = async (symbol = "BTCUSDT") => {
         }
       }
       // preço médio
-      if (amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES) {
+      if (STRATEGY_HAS_AVERAGE_PRICE && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES) {
         // SE a posição for de compra, cria uma ordem de compra
         // type: "MARKET" para criar a ordem que será executada direto
         console.log("Teste de preço médio", {entryPrice, price, STRATEGY_DIFF_TO_AVERAGE})
@@ -297,7 +299,7 @@ const runBot = async (symbol = "BTCUSDT") => {
 
 
       // STOP LOSS
-      if (amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
+      if (STRATEGY_HAS_STOP_LOSS && amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
         console.log("Teste de stop loss", {STRATEGY_MAX_AVERAGE_PRICES, amountOfAveragePrices, price}, entryPrice + STRATEGY_VALUE_TO_STOP_LOSS)
 
         amountOfAveragePrices = 0;
@@ -330,8 +332,6 @@ const runBot = async (symbol = "BTCUSDT") => {
     console.error(error);
   }
 }
-
-runBot();
 
 setInterval( async () => {
   console.log("\n\n\nrodando...", new Date());

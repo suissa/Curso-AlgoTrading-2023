@@ -14,12 +14,11 @@ const symbol = "BTCUSDT";
 const STRATEGY_DIFF_TO_CLOSE = 30;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
-const STRATEGY_VALUE_TO_STOP_LOSS = 200;
+const STRATEGY_VALUE_TO_STOP_LOSS = 90;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
 
 let amountOfAveragePrices = 0;
-
 
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
@@ -199,6 +198,7 @@ const testToCreatePosition = async (data) => {
   return signal;
 }
 
+
 const runBot = async (symbol = "BTCUSDT") => {
   try {
     const position = await getPosition(symbol);
@@ -248,7 +248,6 @@ const runBot = async (symbol = "BTCUSDT") => {
           console.log({result});
         }
       }
-
       // preço médio
       if (STRATEGY_HAS_AVERAGE_PRICE && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES) {
         // SE a posição for de compra, cria uma ordem de compra
