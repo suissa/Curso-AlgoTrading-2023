@@ -11,7 +11,7 @@ const client = Binance({
 });
 
 const symbol = "BTCUSDT";
-const STRATEGY_DIFF_TO_CLOSE = 90;
+const STRATEGY_DIFF_TO_CLOSE = 70;
 const STRATEGY_VALUE_TO_STOP_LOSS = 50;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
