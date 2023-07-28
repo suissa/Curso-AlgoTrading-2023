@@ -12,11 +12,12 @@ const client = Binance({
 
 const symbol = "BTCUSDT";
 const STRATEGY_DIFF_TO_CLOSE = 30;
+const STRATEGY_VALUE_TO_STOP_LOSS = 90;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
-const STRATEGY_VALUE_TO_STOP_LOSS = 90;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
+const STRATEGY_AMOUNT = 0.01;
 
 let amountOfAveragePrices = 0;
 
@@ -170,7 +171,7 @@ const testToCreatePosition = async (data) => {
   if ((isSmaCrossOver && isRsiOverSold && isMacdCrossOver) || isLastThreeGreens) {
     console.log("\n\n\n Entrou na estratégia BUY - create order", {isSmaCrossOver, isRsiOverSold, isMacdCrossOver, isLastThreeGreens});
     const price = data[lastIndex].close; // pega o último preço
-    const quantity = 0.001;
+    const quantity = STRATEGY_AMOUNT;
     const order = {
       symbol,
       quantity,
@@ -183,7 +184,7 @@ const testToCreatePosition = async (data) => {
   } else if ((isSmaCrossUnder && isRsiOverBought && isMacdCrossUnder) || isLastThreeReds) {
     console.log("\n\n\n Entrou na estratégia SELL - create order", {isSmaCrossOver, isRsiOverSold, isMacdCrossOver, isLastThreeReds});
     const price = data[lastIndex].close; // pega o último preço
-    const quantity = 0.001;
+    const quantity = STRATEGY_AMOUNT;
     const order = {
       quantity,
       symbol,
