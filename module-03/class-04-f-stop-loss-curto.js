@@ -302,6 +302,12 @@ const runBot = async (symbol = "BTCUSDT") => {
         // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
         console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice})
         if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
+
+          if (openOrders.length > 0) {
+            const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
+            console.log(cancel);
+          }
+
           const order = {
             symbol,
             quantity,
@@ -313,6 +319,12 @@ const runBot = async (symbol = "BTCUSDT") => {
         }
         // se o lastPrice for maior que o entryPrice mais o valor do stop loss e side SELL
         if (side == "SELL" && entryPrice + STRATEGY_VALUE_TO_STOP_LOSS < lastPrice) {
+
+          if (openOrders.length > 0) {
+            const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
+            console.log(cancel);
+          }
+          
           const order = {
             symbol,
             quantity,
