@@ -295,7 +295,7 @@ const runBot = async (symbol = "BTCUSDT") => {
 
 
       // STOP LOSS
-      if (STRATEGY_HAS_STOP_LOSS && amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
+      if (STRATEGY_HAS_STOP_LOSS || amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
         console.log("Teste de stop loss", {STRATEGY_MAX_AVERAGE_PRICES, amountOfAveragePrices, price}, entryPrice + STRATEGY_VALUE_TO_STOP_LOSS)
 
         amountOfAveragePrices = 0;
