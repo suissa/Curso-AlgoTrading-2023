@@ -1,8 +1,8 @@
 const Binance = require("binance-api-node").default;
 require("dotenv").config();
 // ta funcionando
-const API_KEY = process.env.API_KEY_BRAVE;
-const API_SECRET = process.env.API_SECRET_BRAVE;
+const API_KEY = process.env.API_KEY_OPERA;
+const API_SECRET = process.env.API_SECRET_OPERA;
 
 const client = Binance({
   apiKey: API_KEY,
@@ -11,14 +11,14 @@ const client = Binance({
 });
 
 const symbol = "BTCUSDT";
-const STRATEGY_DIFF_TO_CLOSE = 30;
-const STRATEGY_DIFF_TO_AVERAGE = 70;
+const STRATEGY_DIFF_TO_CLOSE = 50;
+const STRATEGY_DIFF_TO_AVERAGE = 100;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
 const STRATEGY_VALUE_TO_STOP_LOSS = 200;
-const STRATEGY_HAS_AVERAGE_PRICE = false;
+const STRATEGY_HAS_AVERAGE_PRICE = true;
 const STRATEGY_HAS_STOP_LOSS = true;
 
-let amountOfAveragePrices = 0;
+let STRATEGY_AMOUNT_OF_AVERAGE_PRICES = 0;
 
 
 const getPosition = async (symbol = "BTCUSDT") => {
@@ -137,7 +137,7 @@ const calcularMACD = (precos, periodoCurto, periodoLongo, sinalPeriodo) => {
 
 const testToCreatePosition = async (data) => {
   console.log("testToCreatePosition");
-  amountOfAveragePrices = 0;
+  STRATEGY_AMOUNT_OF_AVERAGE_PRICES = 0;
   const lastIndex = data.length - 1;
   const signal = {};
 
@@ -250,7 +250,7 @@ const runBot = async (symbol = "BTCUSDT") => {
       }
 
       // preço médio
-      if (STRATEGY_HAS_AVERAGE_PRICE && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES) {
+      if (STRATEGY_HAS_AVERAGE_PRICE && STRATEGY_AMOUNT_OF_AVERAGE_PRICES < STRATEGY_MAX_AVERAGE_PRICES) {
         // SE a posição for de compra, cria uma ordem de compra
         // type: "MARKET" para criar a ordem que será executada direto
         console.log("Teste de preço médio", {entryPrice, price, STRATEGY_DIFF_TO_AVERAGE})
@@ -262,8 +262,8 @@ const runBot = async (symbol = "BTCUSDT") => {
             const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
             console.log(cancel);
           }
-          amountOfAveragePrices += 1;
-          console.log("PREÇO MÉDIO - criando ordem de compra", {side, amountOfAveragePrices});
+          STRATEGY_AMOUNT_OF_AVERAGE_PRICES += 1;
+          console.log("PREÇO MÉDIO - criando ordem de compra", {side, STRATEGY_AMOUNT_OF_AVERAGE_PRICES});
           const order = {
             symbol,
             quantity,
@@ -280,8 +280,8 @@ const runBot = async (symbol = "BTCUSDT") => {
             const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
             console.log(cancel);
           }
-          amountOfAveragePrices += 1;
-          console.log("PREÇO MÉDIO - criando ordem de venda", {side, amountOfAveragePrices});
+          STRATEGY_AMOUNT_OF_AVERAGE_PRICES += 1;
+          console.log("PREÇO MÉDIO - criando ordem de venda", {side, STRATEGY_AMOUNT_OF_AVERAGE_PRICES});
           const order = {
             symbol,
             quantity,
@@ -295,7 +295,7 @@ const runBot = async (symbol = "BTCUSDT") => {
 
 
       // STOP LOSS
-      if (STRATEGY_HAS_STOP_LOSS && amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
+      if (STRATEGY_HAS_STOP_LOSS && STRATEGY_AMOUNT_OF_AVERAGE_PRICES == STRATEGY_MAX_AVERAGE_PRICES) {
         console.log("Teste de stop loss", {STRATEGY_MAX_AVERAGE_PRICES, amountOfAveragePrices, price}, entryPrice + STRATEGY_VALUE_TO_STOP_LOSS)
 
         amountOfAveragePrices = 0;
