@@ -1,15 +1,14 @@
 require("dotenv").config();
 
-const API_KEY = process.env.API_KEY_BRAVE;
-const API_SECRET = process.env.API_SECRET_BRAVE;
+const API_KEY = process.env.API_KEY;
+const API_SECRET = process.env.API_SECRET;
 
 const client = require('./factories/binance-api-node')(API_KEY, API_SECRET);
 const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
 
-
 const symbol = "BTCUSDT";
-const STRATEGY_DIFF_TO_CLOSE = 70;
-const STRATEGY_VALUE_TO_STOP_LOSS = 50;
+const STRATEGY_DIFF_TO_CLOSE = 50;
+const STRATEGY_VALUE_TO_STOP_LOSS = 30;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
