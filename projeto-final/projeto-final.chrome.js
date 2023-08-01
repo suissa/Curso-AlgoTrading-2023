@@ -198,8 +198,8 @@ const testToCreatePosition = async (data) => {
   const isHammerUp = hammerUp(candles5);
   const isHammerDown = hammerDown(candles5);
   const isInvertedHammer = invertedHammer(candles5);
-  const isThreeBlackCrows = detectThreeBlackCrows(candles);
-  const isThreeWhiteSoldiers = detectThreeWhiteSoldiers(candles);
+  const isThreeBlackCrows = detectThreeBlackCrows(candles5);
+  const isThreeWhiteSoldiers = detectThreeWhiteSoldiers(candles5);
   const isHaramiTop = detectHaramiTop(candles5);
   const isHaramiBottom = detectHaramiBottom(candles5);
   const isPinBarUp = pinBarUp(candles5);
@@ -208,8 +208,8 @@ const testToCreatePosition = async (data) => {
   const isDarkCloudCover = darkCloudCover(candles5);
   const isTwoBearishOneBullishPattern = detectTwoBearishOneBullishPattern(candles5);
   const isTwoBullishOneBearishPattern = detectTwoBullishOneBearishPattern(candles5);
-  const isBullishTrend = detectBullishTrend(candles);
-  const isBearishTrend = detectBearishTrend(candles);
+  const isBullishTrend = detectBullishTrend(candles5);
+  const isBearishTrend = detectBearishTrend(candles5);
   const isLastSevenCandlesAreGreen = lastSevenCandlesAreGreen(candles5);
   const isLastSevenCandlesAreRed = lastSevenCandlesAreRed(candles5);
   const isTweezerBottom = tweezerBottom(candles5);
