@@ -578,7 +578,6 @@ setInterval( async () => {
       }
 
       // STOP LOSS
-      
       if (STRATEGY_HAS_STOP_LOSS || amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
         return stopLoss(position, amountOfAveragePrices)
       }
