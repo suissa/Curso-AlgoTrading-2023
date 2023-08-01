@@ -573,7 +573,7 @@ setInterval( async () => {
       }
 
       // preço médio
-      if (STRATEGY_HAS_AVERAGE_PRICE && hasOpenPosition && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES0 {
+      if (STRATEGY_HAS_AVERAGE_PRICE && hasOpenPosition && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES) {
         return averagePrice(position, amountOfAveragePrices)
       }
 
