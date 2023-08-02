@@ -345,6 +345,7 @@ const testToCreatePosition = async (data) => {
     trendUpTestPassCount < 2 && 
     !isLastSevenCandlesAreGreen && 
     ( 
+      isBullishTrend ||
       isViolinadaEmbaixo|| 
       isLastSevenCandlesAreRed || 
       isMorningStar|| 
@@ -376,6 +377,7 @@ const testToCreatePosition = async (data) => {
     trendDownTestPassCount < 2 && 
     !isLastSevenCandlesAreRed && 
     ( 
+      isBearishTrend||
       isViolinadaEmCima || 
       isLastSevenCandlesAreGreen|| 
       isShootingStar|| 
