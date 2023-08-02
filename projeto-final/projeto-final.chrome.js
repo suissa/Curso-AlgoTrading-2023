@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const clc = require("cli-color");
+
 const API_KEY = process.env.API_KEY;
 const API_SECRET = process.env.API_SECRET;
 
