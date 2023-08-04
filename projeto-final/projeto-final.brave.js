@@ -9,13 +9,13 @@ const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
 
 
 const symbol = "BTCUSDT";
-const STRATEGY_DIFF_TO_CLOSE = 70;
-const STRATEGY_VALUE_TO_STOP_LOSS = 50;
+const STRATEGY_DIFF_TO_CLOSE = 50;
+const STRATEGY_VALUE_TO_STOP_LOSS = 30;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
-const STRATEGY_AMOUNT = 0.015;
+const STRATEGY_AMOUNT = 0.02;
 const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
 
