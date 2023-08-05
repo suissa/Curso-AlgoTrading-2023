@@ -477,7 +477,7 @@ const stopLoss = async (position, amountOfAveragePrices) => {
   if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
-      quantity,
+      quantity, 
       type: "MARKET",
       side: "SELL"
     }
