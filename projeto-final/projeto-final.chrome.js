@@ -18,7 +18,17 @@ const STRATEGY_HAS_STOP_LOSS = true;
 const STRATEGY_AMOUNT = 0.015;
 const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
+let CURRENT_PRICE = 0;
 
+const WebSocket = require('ws');
+const ws = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade');
+ws.on('open', () => {
+  console.log('Conectado ao websocket de trades da Binance');
+});
+ws.on('message', (data) => {
+  const trade = JSON.parse(data);
+  CURRENT_PRICE = parseFloat(trade.p)
+});
 
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
@@ -469,15 +479,19 @@ const stopLoss = async (position, amountOfAveragePrices) => {
   const amount = parseFloat(position.positionAmt);
   const side = amount > 0 ? "BUY" : "SELL";
   const quantity = Math.abs(amount);
-  const lastPrice = parseFloat(position.markPrice);
+  // const lastPrice = parseFloat(position.markPrice);
+  const lastPrice = CURRENT_PRICE
 
   amountOfAveragePrices = 0;
   // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
-  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice})
+  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice, CURRENT_PRICE})
+
+  console.log(position)
+  return false
   if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
-      quantity, 
+      quantity,
       type: "MARKET",
       side: "SELL"
     }
