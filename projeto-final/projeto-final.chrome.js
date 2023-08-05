@@ -33,6 +33,14 @@ ws.on('message', (data) => {
 const getFuturesAllOrders = async (symbol = "BTCUSDT") => (await client.futuresAllOrders({ symbol: 'BTCUSDT' })).reverse()
 const cancelFuturesOrder = async (symbol = 'BTCUSDT', orderId) => await client.futuresCancelOrder({ symbol: 'BTCUSDT', orderId })
 
+const cancelOneOrder = async (openOrders) => {
+  const [order1] = openOrders
+  console.log("212: Eh PRA CANCELAR UMA ORDER: ", order1.orderId)
+  const cancelResultsFirst = await cancelFuturesOrder('BTCUSDT', order1.orderId)
+  const openOrdersNow = await getFuturesOpenOrders()
+  console.log("215: ORDERS CANCELADAS,", {openOrdersNow, cancelResultsFirst})
+}
+
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
     const positions = await client.futuresPositionRisk({symbol});
@@ -176,18 +184,12 @@ const {
   islandReversalTop
 } = require('./candle.patterns')
 
-const testToCreatePosition = async (data) => {
+const testToCreatePosition = async (data, openOrders) => {
   console.log("testToCreatePosition");
   const lastIndex = data.length - 1;
   const signal = {};
 
-  await getFuturesAllOrders();
-  
-  const openOrders = await getFutureOpenOrders(symbol);
-  // cria ordem de fechamento
-  if (openOrders.length === 0) {
-      closeOrder(position, symbol, lastPrice);
-  }
+  if (openOrders.length > 0) await cancelOneOrder(openOrders);
 
   const symbol = "BTCUSDT";
   const shortPeriod = 50;
@@ -519,6 +521,7 @@ const stopLoss = async (position, amountOfAveragePrices) => {
     console.log(result);
   }
 }
+
 const isBuyPriceWithinStrategyRange = (entryPrice) => entryPrice + STRATEGY_DIFF_TO_AVERAGE < price
 const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIFF_TO_AVERAGE > price
 
@@ -582,15 +585,16 @@ setInterval( async () => {
     
     const candles = await getCandles(symbol);
     const lastPrice = candles[candles.length - 1].close;
+    const openOrders = await getFutureOpenOrders(symbol);
+
 
     if (!hasOpenPosition) {
 
       // Verifica condição para criar uma ordem
-      await testToCreatePosition(candles);
+      await testToCreatePosition(candles, openOrders);
 
     } else { // se tem posição aberta
 
-      const openOrders = await getFutureOpenOrders(symbol);
       // cria ordem de fechamento
       if (openOrders.length === 0) {
           closeOrder(position, symbol, lastPrice);

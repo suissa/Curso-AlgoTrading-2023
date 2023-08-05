@@ -189,7 +189,7 @@ const testToCreatePosition = async (data, openOrders) => {
   const lastIndex = data.length - 1;
   const signal = {};
 
-  await cancelOneOrder(openOrders);
+  if (openOrders.length > 0) await cancelOneOrder(openOrders);
 
   const symbol = "BTCUSDT";
   const shortPeriod = 50;

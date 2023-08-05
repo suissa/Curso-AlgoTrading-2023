@@ -18,6 +18,26 @@ const STRATEGY_AMOUNT = 0.02;
 const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
 
+const WebSocket = require('ws');
+const ws = new WebSocket('wss://fstream.binance.com/ws/btcusdt@aggTrade');
+ws.on('open', () => {
+  console.log('Conectado ao websocket de trades da Binance');
+});
+ws.on('message', (data) => {
+  const trade = JSON.parse(data);
+  CURRENT_PRICE = parseFloat(trade.p)
+});
+
+const getFuturesAllOrders = async (symbol = "BTCUSDT") => (await client.futuresAllOrders({ symbol: 'BTCUSDT' })).reverse()
+const cancelFuturesOrder = async (symbol = 'BTCUSDT', orderId) => await client.futuresCancelOrder({ symbol: 'BTCUSDT', orderId })
+
+const cancelOneOrder = async (openOrders) => {
+  const [order1] = openOrders
+  console.log("212: Eh PRA CANCELAR UMA ORDER: ", order1.orderId)
+  const cancelResultsFirst = await cancelFuturesOrder('BTCUSDT', order1.orderId)
+  const openOrdersNow = await getFuturesOpenOrders()
+  console.log("215: ORDERS CANCELADAS,", {openOrdersNow, cancelResultsFirst})
+}
 
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
@@ -162,10 +182,12 @@ const {
   islandReversalTop
 } = require('./candle.patterns')
 
-const testToCreatePosition = async (data) => {
+const testToCreatePosition = async (data, openOrders) => {
   console.log("testToCreatePosition");
   const lastIndex = data.length - 1;
   const signal = {};
+
+  if (openOrders.length > 0) await cancelOneOrder(openOrders);
 
   const symbol = "BTCUSDT";
   const shortPeriod = 50;
@@ -345,7 +367,6 @@ const testToCreatePosition = async (data) => {
     trendUpTestPassCount < 2 && 
     !isLastSevenCandlesAreGreen && 
     ( 
-      isBullishTrend ||
       isViolinadaEmbaixo|| 
       isLastSevenCandlesAreRed || 
       isMorningStar|| 
@@ -377,7 +398,6 @@ const testToCreatePosition = async (data) => {
     trendDownTestPassCount < 2 && 
     !isLastSevenCandlesAreRed && 
     ( 
-      isBearishTrend||
       isViolinadaEmCima || 
       isLastSevenCandlesAreGreen|| 
       isShootingStar|| 
@@ -470,11 +490,13 @@ const stopLoss = async (position, amountOfAveragePrices) => {
   const amount = parseFloat(position.positionAmt);
   const side = amount > 0 ? "BUY" : "SELL";
   const quantity = Math.abs(amount);
-
+  // const lastPrice = parseFloat(position.markPrice);
+  const lastPrice = CURRENT_PRICE
 
   amountOfAveragePrices = 0;
   // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
-  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice})
+  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice, CURRENT_PRICE})
+
   if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
@@ -561,15 +583,16 @@ setInterval( async () => {
     
     const candles = await getCandles(symbol);
     const lastPrice = candles[candles.length - 1].close;
+    const openOrders = await getFutureOpenOrders(symbol);
+
 
     if (!hasOpenPosition) {
 
       // Verifica condição para criar uma ordem
-      await testToCreatePosition(candles);
+      await testToCreatePosition(candles, openOrders);
 
     } else { // se tem posição aberta
 
-      const openOrders = await getFutureOpenOrders(symbol);
       // cria ordem de fechamento
       if (openOrders.length === 0) {
           closeOrder(position, symbol, lastPrice);
@@ -581,8 +604,9 @@ setInterval( async () => {
       }
 
       // STOP LOSS
+      
       if (STRATEGY_HAS_STOP_LOSS || amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
-        return stopLoss(position, amountOfAveragePrices)
+        return stopLoss(position, amountOfAveragePrices, lastPrice)
       }
       }
   } catch (error) {
