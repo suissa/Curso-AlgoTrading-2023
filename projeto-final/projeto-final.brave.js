@@ -30,6 +30,9 @@ ws.on('message', (data) => {
   CURRENT_PRICE = parseFloat(trade.p)
 });
 
+const getFuturesAllOrders = async (symbol = "BTCUSDT") => (await client.futuresAllOrders({ symbol: 'BTCUSDT' })).reverse()
+const cancelFuturesOrder = async (symbol = 'BTCUSDT', orderId) => await client.futuresCancelOrder({ symbol: 'BTCUSDT', orderId })
+
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
     const positions = await client.futuresPositionRisk({symbol});
@@ -177,6 +180,8 @@ const testToCreatePosition = async (data) => {
   console.log("testToCreatePosition");
   const lastIndex = data.length - 1;
   const signal = {};
+
+  await getFuturesAllOrders();
 
   const symbol = "BTCUSDT";
   const shortPeriod = 50;

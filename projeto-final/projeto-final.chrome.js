@@ -30,6 +30,9 @@ ws.on('message', (data) => {
   CURRENT_PRICE = parseFloat(trade.p)
 });
 
+const getFuturesAllOrders = async (symbol = "BTCUSDT") => (await client.futuresAllOrders({ symbol: 'BTCUSDT' })).reverse()
+const cancelFuturesOrder = async (symbol = 'BTCUSDT', orderId) => await client.futuresCancelOrder({ symbol: 'BTCUSDT', orderId })
+
 const getPosition = async (symbol = "BTCUSDT") => {
   try {
     const positions = await client.futuresPositionRisk({symbol});
@@ -177,6 +180,14 @@ const testToCreatePosition = async (data) => {
   console.log("testToCreatePosition");
   const lastIndex = data.length - 1;
   const signal = {};
+
+  await getFuturesAllOrders();
+  
+  const openOrders = await getFutureOpenOrders(symbol);
+  // cria ordem de fechamento
+  if (openOrders.length === 0) {
+      closeOrder(position, symbol, lastPrice);
+  }
 
   const symbol = "BTCUSDT";
   const shortPeriod = 50;
@@ -508,7 +519,6 @@ const stopLoss = async (position, amountOfAveragePrices) => {
     console.log(result);
   }
 }
-
 const isBuyPriceWithinStrategyRange = (entryPrice) => entryPrice + STRATEGY_DIFF_TO_AVERAGE < price
 const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIFF_TO_AVERAGE > price
 
