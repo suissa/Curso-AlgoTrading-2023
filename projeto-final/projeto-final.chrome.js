@@ -463,13 +463,13 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
   }
 }
 
-const stopLoss = async (position, amountOfAveragePrices, lastPrice) => {
+const stopLoss = async (position, amountOfAveragePrices) => {
 
   const entryPrice = parseFloat(position.entryPrice);
   const amount = parseFloat(position.positionAmt);
   const side = amount > 0 ? "BUY" : "SELL";
   const quantity = Math.abs(amount);
-
+  const lastPrice = parseFloat(position.markPrice);
 
   amountOfAveragePrices = 0;
   // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
