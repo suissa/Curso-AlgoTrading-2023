@@ -463,7 +463,7 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
   }
 }
 
-const stopLoss = async (position, amountOfAveragePrices) => {
+const stopLoss = async (position, amountOfAveragePrices, lastPrice) => {
 
   const entryPrice = parseFloat(position.entryPrice);
   const amount = parseFloat(position.positionAmt);
@@ -582,7 +582,7 @@ setInterval( async () => {
       // STOP LOSS
       
       if (STRATEGY_HAS_STOP_LOSS || amountOfAveragePrices == STRATEGY_MAX_AVERAGE_PRICES) {
-        return stopLoss(position, amountOfAveragePrices)
+        return stopLoss(position, amountOfAveragePrices, lastPrice)
       }
       }
   } catch (error) {
