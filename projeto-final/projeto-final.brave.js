@@ -486,8 +486,6 @@ const stopLoss = async (position, amountOfAveragePrices) => {
   // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
   console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice, CURRENT_PRICE})
 
-  console.log(position)
-  return false
   if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
