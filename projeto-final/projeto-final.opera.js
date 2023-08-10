@@ -378,7 +378,8 @@ const testToCreatePosition = async (data, openOrders) => {
       isTwoBearishOneBullishPattern|| 
       isTweezerBottom ||
       isPiercingPattern ||
-      isIslandReversalBottom
+      isIslandReversalBottom ||
+      isBullishTrend
     )
   ) {
     hadPreviousThreeCandlePattern = false;
@@ -409,7 +410,8 @@ const testToCreatePosition = async (data, openOrders) => {
       isTwoBullishOneBearishPattern|| 
       isTweezerTop ||
       isDarkCloudCover ||
-      isIslandReversalTop
+      isIslandReversalTop ||
+      isBearishTrend
     )) {
     console.log("\n\n\n Entrou na estratégia SELL - create order", {isSmaCrossOver, isRsiOverSold, isMacdCrossOver, isLastThreeReds});
     const price = data[lastIndex].close; // pega o último preço

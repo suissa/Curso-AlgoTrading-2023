@@ -380,7 +380,9 @@ const testToCreatePosition = async (data, openOrders) => {
       isTwoBearishOneBullishPattern|| 
       isTweezerBottom ||
       isPiercingPattern ||
-      isIslandReversalBottom
+      isIslandReversalBottom ||
+      isBullishTrend ||
+      isBearishTrend
     )
   ) {
     hadPreviousThreeCandlePattern = false;
