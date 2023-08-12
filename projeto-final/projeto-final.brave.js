@@ -397,8 +397,8 @@ const testToCreatePosition = async (data, openOrders) => {
     console.log({result});
   } 
   
-  isBearishTrend = true 
-  
+  // isBearishTrend = true 
+
   if (!hadPreviousThreeCandlePattern && 
     trendDownTestPassCount < 2 && 
     !isLastSevenCandlesAreRed && 
