@@ -1,5 +1,7 @@
 Curso de AlgoTrade - Trade algorítmico
 
+[Slides](https://docs.google.com/presentation/d/1qvYxrhz2adhK5AdpoWHEp5C4Lwh86C0BR-1lEe4L6fU/edit?usp=sharing)
+
 ## Módulo 1: Introdução
 
 - Visão geral do mercado financeiro e do trading algorítmico
