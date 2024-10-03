@@ -1,7 +1,7 @@
-const API_KEY = process.env.API_KEY;
-const API_SECRET = process.env.API_SECRET;
 
 module.exports = (API_KEY, API_SECRET) => {
+  console.log("API_KEY: ", API_KEY)
+  console.log("API_SECRET: ", API_SECRET)
   const Binance2 = require('binance-api-node').default;
   const client2 = Binance2({
     apiKey: API_KEY,

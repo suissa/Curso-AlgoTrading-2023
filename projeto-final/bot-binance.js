@@ -31,6 +31,13 @@ const getPosition = async (symbol = "BTCUSDT") => {
   }
 }
 
+
+;(async () => {
+    const position = await getPosition(symbol);
+    console.log("position: ", position)
+})();
+return false;
+
 const getCandles = async (symbol = "BTCUSDT", interval = "5m") => {
   try {
     const candles = await client.futuresCandles({
