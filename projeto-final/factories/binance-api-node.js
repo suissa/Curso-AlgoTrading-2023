@@ -1,5 +1,5 @@
-const API_KEY = 'rtZARTdKFWX5JNOQ5dvRUauXHiMtXMS2FhbFXrIhptjI1nbUlacjYuYtCbzT1PmO';
-const API_SECRET = 'rqFCESx0J1Aby5BE4LMzh5dggG4Xe3jDQ6QAa6y1DGof8hTWcfW5iCJBVV70bV8d';
+const API_KEY = process.env.API_KEY;
+const API_SECRET = process.env.API_SECRET;
 
 module.exports = (API_KEY, API_SECRET) => {
   const Binance2 = require('binance-api-node').default;
