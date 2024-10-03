@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const API_KEY = process.env.API_KEY;
 const API_SECRET = process.env.API_SECRET;
-
+const clc = require('clc');
 const client = require('./factories/binance-api-node')(API_KEY, API_SECRET);
 const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
 
