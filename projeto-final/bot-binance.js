@@ -369,7 +369,8 @@ const testToCreatePosition = async (data) => {
       symbol,
       quantity,
       type: "MARKET",
-      side: "BUY"
+      side: "BUY",
+      positionSide: "LONG", 
     }
     console.log({order});
     const result = await createOrder(order);
@@ -400,7 +401,8 @@ const testToCreatePosition = async (data) => {
       quantity,
       symbol,
       type: "MARKET",
-      side: "SELL"
+      side: "SELL",
+      positionSide: "SHORT", 
     }
     console.log({order});
     const result = await createOrder(order);

@@ -4,3 +4,5 @@ node_modules/
 module-03/.env
 projeto-final/.env
 */.env
+
+yarn.lock
