@@ -454,7 +454,7 @@ const getDataFromPosition = (position) => {
 
 const getFuturesAccountBalance = async () => {
   try {
-    const balances = await client2.futuresAccountBalance();
+    const balances = await client.futuresAccountBalance();
     console.log("Saldo disponível de futuros: ", balances);
     return balances;
   } catch (error) {
@@ -589,6 +589,10 @@ setInterval( async () => {
     
     const candles = await getCandles(symbol);
     const lastPrice = candles[candles.length - 1].close;
+
+    const balances = await getFuturesAccountBalance();
+    const {balance} = balances[0];
+    console.log({balance});
 
     if (!hasOpenPosition) {
 
