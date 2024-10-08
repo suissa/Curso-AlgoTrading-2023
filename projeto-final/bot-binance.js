@@ -2,7 +2,9 @@ require("dotenv").config();
 
 const API_KEY = process.env.API_KEY;
 const API_SECRET = process.env.API_SECRET;
-const clc = require('clc');
+const chalk = require('chalk');
+
+
 const client = require('./factories/binance-api-node')(API_KEY, API_SECRET);
 const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
 
@@ -229,117 +231,117 @@ const testToCreatePosition = async (data) => {
 
   
   if (isViolinadaEmbaixo) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve uma violinada embaixo no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve uma violinada embaixo no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   } 
   if (isViolinadaEmCima) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve uma violinada em cima no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve uma violinada em cima no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isMorningStar) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA DA MANHÃ último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA DA MANHÃ último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isMorningStar15) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA DA MANHÃ último candle de 15min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA DA MANHÃ último candle de 15min!'));
     hadPreviosCandlePattern = true;
   }
   if (isShootingStar) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA CADENTE último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA CADENTE último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isShootingStar15) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA CADENTE último candle de 15min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve uma ESTRELA CADENTE último candle de 15min!'));
     hadPreviosCandlePattern = true;
   }
   if (isHammerUp) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um MARTELO UP no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um MARTELO UP no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isHammerDown) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um MARTELO DOWN no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um MARTELO DOWN no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isInvertedHammer) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um INVERTED HAMMER no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um INVERTED HAMMER no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isThreeBlackCrows) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um THREE BLACK CROWS no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um THREE BLACK CROWS no último candle de 5min!'));
     // hadPreviousThreeCandlePattern = true;
   }
   if (isThreeWhiteSoldiers) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um THREE WHITE SOLDIERS no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um THREE WHITE SOLDIERS no último candle de 5min!'));
     // hadPreviousThreeCandlePattern = true;
   }
   if (isHaramiTop) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um HARAMI TOP no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um HARAMI TOP no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isHaramiBottom) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um HARAMI BOTTOM no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um HARAMI BOTTOM no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isPinBarUp) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um PIN BAR UP no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um PIN BAR UP no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isPinBarDown) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um PIN BAR DOWN no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um PIN BAR DOWN no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isPiercingPattern) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um PIERCING PATTERN no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um PIERCING PATTERN no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isDarkCloudCover) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um DARK CLOUD COVER no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um DARK CLOUD COVER no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isTwoBearishOneBullishPattern) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um TWO BEARISH ONE BULLISH PATTERN no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um TWO BEARISH ONE BULLISH PATTERN no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isTwoBullishOneBearishPattern) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um TWO BULLISH ONE BEARISH PATTERN no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um TWO BULLISH ONE BEARISH PATTERN no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isBullishTrend) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nTendência de alta!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nTendência de alta!'));
     trendUpTestPassCount += 1;
   }
   if (isBearishTrend) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nTendência de baixa!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nTendência de baixa!'));
     trendDownTestPassCount += 1;
   }
   if (isLastSevenCandlesAreGreen) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nOs últimos 7 candles foram verdes!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nOs últimos 7 candles foram verdes!'));
   }
   if (isLastSevenCandlesAreRed) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nOs últimos 7 candles foram vermelhos!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nOs últimos 7 candles foram vermelhos!'));
   }
   if (isTweezerBottom) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um TWEZZER BOTTOM no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um TWEZZER BOTTOM no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isTweezerTop) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um TWEZZER UP no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um TWEZZER UP no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isBearishTrendAndBullishEngulfing) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um BULLISH ENGULFING no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um BULLISH ENGULFING no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isBullishTrendAndBearishEngulfing) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um BEARISH ENGULFING no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um BEARISH ENGULFING no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isIslandReversalBottom) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um ISLAND REVERSAL BOTTOM no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um ISLAND REVERSAL BOTTOM no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
   if (isIslandReversalTop) {
-    console.log("🚀", clc.bgCyanBright.black.bold('\n\n\n\nHouve um ISLAND REVERSAL TOP no último candle de 5min!'));
+    console.log("🚀", chalk.bgCyanBright.black.bold('\n\n\n\nHouve um ISLAND REVERSAL TOP no último candle de 5min!'));
     hadPreviosCandlePattern = true;
   }
 
