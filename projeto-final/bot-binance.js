@@ -19,6 +19,7 @@ const STRATEGY_HAS_STOP_LOSS = true;
 const STRATEGY_AMOUNT = 0.005;
 const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
+let CURRENT_PRICE = 0;
 
 
 const getPosition = async (symbol = "BTCUSDT") => {
@@ -34,6 +35,16 @@ const getPosition = async (symbol = "BTCUSDT") => {
 }
 
 
+const getCurrentPrice = async (symbol) => {
+  try {
+    const ticker = await client.prices({ symbol });
+    console.log(`Preço atual de ${symbol}:`, ticker[symbol]);
+    return ticker[symbol];
+  } catch (error) {
+    console.error("Erro ao obter o preço atual: ", error);
+    throw error;
+  }
+};
 
 const getCandles = async (symbol = "BTCUSDT", interval = "5m") => {
   try {
@@ -555,6 +566,7 @@ const averagePrice = async (position, lastPrice) => {
 setInterval( async () => {
   console.log("\n\n\nrodando...", new Date());
   try {
+    CURRENT_PRICE = await getCurrentPrice(symbol);
     const position = await getPosition(symbol);
     const hasOpenPosition = position.positionAmt != "0.000";
     const entryPrice = parseFloat(position.entryPrice);
