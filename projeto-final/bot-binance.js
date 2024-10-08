@@ -452,6 +452,18 @@ const getDataFromPosition = (position) => {
   return {hasOpenPosition, entryPrice, amount, side, quantity};
 }
 
+const getFuturesAccountBalance = async () => {
+  try {
+    const balances = await client2.futuresAccountBalance();
+    console.log("Saldo disponível de futuros: ", balances);
+    return balances;
+  } catch (error) {
+    console.error("Erro ao obter o saldo de futuros: ", error);
+    throw error;
+  }
+};
+
+
 const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
   const {hasOpenPosition, entryPrice, amount, side, quantity} = getDataFromPosition(position);
   console.log("\n\n\n Entrou na estratégia de fechamento - create order\n\n\n", {side});
@@ -460,7 +472,7 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
       symbol,
       price: Number((entryPrice + STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
       quantity,
-      type: "LIMIT",
+      type: "MARKET",
       side: "SELL",
     }
     const result = await createOrder(order);
@@ -471,7 +483,7 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
       symbol,
       price: Number((entryPrice - STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
       quantity,
-      type: "LIMIT",
+      type: "MARKET",
       side: "BUY",
     }
     const result = await createOrder(order);
