@@ -4,7 +4,8 @@
   "description": "- Visão geral do mercado financeiro e do trading algorítmico - Conceitos básicos de trading: ordens, tipos de ordens, margem, alavancagem, etc. - Introdução a análise técnica e análise fundamentalista - Estratégias de trading comuns",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node preinstall.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "@tensorflow/tfjs": "^4.4.0",
     "axios": "^1.4.0",
     "binance-api-node": "^0.12.4",
+    "chalk": "^5.3.0",
     "cli-color": "^2.0.3",
     "dotenv": "^16.0.3",
     "google-protobuf": "^3.21.2",
