@@ -469,7 +469,7 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
 }
 
 const stopLoss = async (position, amountOfAveragePrices) => {
-
+  const lastPrice = CURRENT_PRICE;
   const entryPrice = parseFloat(position.entryPrice);
   const amount = parseFloat(position.positionAmt);
   const side = amount > 0 ? "BUY" : "SELL";
