@@ -83,7 +83,7 @@ const getFutureOpenOrders = async (symbol) => {
 };
 
 const createOrder = async (order) => {
-  console.log("createOrder", order);
+  console.log("createOrder", {order});
   try {
     const result = await exchange.createOrder(order.symbol, order.type, order.side, order.quantity, order.price, {
       positionSide: order.positionSide,
@@ -139,7 +139,7 @@ const closeOrder = async (position, symbol = "BTC/USDT", lastPrice) => {
       positionSide: "long"
     };
     const result = await createOrder(order);
-    console.log({ result });
+    console.log("closeOrder: ", { result });
   }
   if (side === "sell") {
     const order = {
@@ -150,7 +150,7 @@ const closeOrder = async (position, symbol = "BTC/USDT", lastPrice) => {
       positionSide: "short"
     };
     const result = await createOrder(order);
-    console.log({ result });
+    console.log("closeOrder: ", { result });
   }
 };
 
@@ -394,6 +394,7 @@ const testToCreatePosition = async (data) => {
     console.log({order});
     const result = await createOrder(order);
     console.log({result});
+    return result;
   } 
   
   if (!hadPreviousThreeCandlePattern && 
@@ -426,11 +427,11 @@ const testToCreatePosition = async (data) => {
     console.log({order});
     const result = await createOrder(order);
     console.log({result});
+    return result;
   }
 
-  return signal;
+  // return signal;
 }
-
 
 setInterval(async () => {
   console.log("\n\n\nrodando...", new Date());
@@ -451,8 +452,8 @@ setInterval(async () => {
         const openOrders = await getFutureOpenOrders(symbol);
         if (openOrders.length > 0) {
           await closeOrder(position, symbol, CURRENT_PRICE);
+          await stopLoss(position);
         }
-        await stopLoss(position);
       }
     }
   } catch (error) {
