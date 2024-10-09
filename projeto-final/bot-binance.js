@@ -608,9 +608,9 @@ setInterval( async () => {
     const candles = await getCandles(symbol);
     const lastPrice = candles[candles.length - 1].close;
 
-    // const balances = await getFuturesAccountBalance();
-    // const {balance} = balances[0];
-    // console.log({balance});
+    const balances = await getFuturesAccountBalance();
+    const {balance} = balances[0];
+    console.log({balances});
 
     if (!hasOpenPosition) {
 
@@ -640,4 +640,4 @@ setInterval( async () => {
     console.error(error);
   }
 
-}, 10 * 1000) // 10 segundos
+}, 30 * 1000) // 10 segundos
