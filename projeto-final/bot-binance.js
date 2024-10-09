@@ -82,22 +82,24 @@ const getFutureOpenOrders = async (symbol = "BTCUSDT") => {
 }
 
 const createOrder = async (order) => {
-  console.log("createOrder");
-  if (order.type === "LIMIT") 
-    order.timeInForce = "GTC";
-  if (order.type === "MARKET") 
-    delete order.price;
-  
-  console.log({order})
+  console.log("createOrder", order);
+  if (order.type === "LIMIT") order.timeInForce = "GTC";
+  if (order.type === "MARKET") delete order.price;
+
+  // Adiciona o positionSide, obrigatório em ordens de futuros
+  if (!order.positionSide) {
+    console.error("Erro: `positionSide` não especificado para a ordem.");
+    return;
+  }
+
   try {
     const result = await client.futuresOrder(order);
-    console.log(result);
+    console.log("Ordem criada: ", result);
     return result;
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao criar ordem: ", error);
   }
-  
-}
+};
 
 const isRedCandle = (candle) => candle.close < candle.open;
 const analyzeIfLastThreeCandlesAreRed = (candles) => {
@@ -474,6 +476,7 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
       quantity,
       type: "MARKET",
       side: "SELL",
+      positionSide: "LONG",
     }
     const result = await createOrder(order);
     console.log({result});
@@ -485,45 +488,43 @@ const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
       quantity,
       type: "MARKET",
       side: "BUY",
+      positionSide: "SHORT",
     }
     const result = await createOrder(order);
     console.log({result});
   }
 }
 
-const stopLoss = async (position, amountOfAveragePrices) => {
-  const lastPrice = CURRENT_PRICE;
+const stopLoss = async (position) => {
   const entryPrice = parseFloat(position.entryPrice);
   const amount = parseFloat(position.positionAmt);
   const side = amount > 0 ? "BUY" : "SELL";
   const quantity = Math.abs(amount);
+  const lastPrice = CURRENT_PRICE;
+  const positionSide = position.positionSide; // Pega o lado da posição: LONG ou SHORT
 
-
-  amountOfAveragePrices = 0;
-  // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
-  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice, amount, side, quantity})
-  if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
+  console.log("STOP LOSS", { entryPrice, lastPrice });
+  if (side === "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
       quantity,
       type: "MARKET",
-      side: "SELL"
-    }
-    const result = await createOrder(order);
-    console.log(result);
+      side: "SELL",
+      positionSide: positionSide // Necessário para corresponder ao lado da posição aberta
+    };
+    await createOrder(order);
   }
-  // se o lastPrice for maior que o entryPrice mais o valor do stop loss e side SELL
-  if (side == "SELL" && entryPrice + STRATEGY_VALUE_TO_STOP_LOSS < lastPrice) {
+  if (side === "SELL" && entryPrice + STRATEGY_VALUE_TO_STOP_LOSS < lastPrice) {
     const order = {
       symbol,
       quantity,
       type: "MARKET",
-      side: "BUY"
-    }
-    const result = await createOrder(order);
-    console.log(result);
+      side: "BUY",
+      positionSide: positionSide // Necessário para corresponder ao lado da posição aberta
+    };
+    await createOrder(order);
   }
-}
+};
 
 const isBuyPriceWithinStrategyRange = (entryPrice) => entryPrice + STRATEGY_DIFF_TO_AVERAGE < price
 const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIFF_TO_AVERAGE > price
@@ -602,6 +603,7 @@ setInterval( async () => {
     const side = amount > 0 ? "BUY" : "SELL";
     const quantity = Math.abs(amount);
     console.log({hasOpenPosition});
+    console.log({position});
     
     const candles = await getCandles(symbol);
     const lastPrice = candles[candles.length - 1].close;
