@@ -610,7 +610,7 @@ setInterval( async () => {
 
     const balances = await getFuturesAccountBalance();
     const {balance} = balances[0];
-    console.log({balances});
+    // console.log({balances});
 
     if (!hasOpenPosition) {
 
@@ -640,4 +640,4 @@ setInterval( async () => {
     console.error(error);
   }
 
-}, 30 * 1000) // 10 segundos
+}, 10 * 1000) // 10 segundos
