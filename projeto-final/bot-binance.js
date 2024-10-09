@@ -9,7 +9,7 @@ const client = require('./factories/binance-api-node')(API_KEY, API_SECRET);
 const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
 
 
-const symbol = "BTCUSDT";
+const symbol = "BTCUSDC";
 const STRATEGY_DIFF_TO_CLOSE = 70;
 const STRATEGY_VALUE_TO_STOP_LOSS = 50;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
