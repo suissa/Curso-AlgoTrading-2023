@@ -48,22 +48,6 @@ const getCurrentPrice = async (symbol) => {
   }
 };
 
-const getCandles = async (symbol = "BTC/USDT", timeframe = "5m", limit = 50) => {
-  try {
-    const candles = await exchange.fetchOHLCV(symbol, timeframe, undefined, limit);
-    return candles.map(candle => ({
-      timestamp: candle[0],
-      open: candle[1],
-      high: candle[2],
-      low: candle[3],
-      close: candle[4],
-      volume: candle[5]
-    }));
-  } catch (error) {
-    console.error("Erro ao obter candles: ", error);
-  }
-};
-
 const cancelFutureOrder = async (symbol, orderId) => {
   try {
     const response = await exchange.cancelOrder(orderId, symbol);
@@ -104,7 +88,7 @@ const stopLoss = async (position) => {
   const lastPrice = CURRENT_PRICE;
   const positionSide = position.positionSide;
 
-  console.log("STOP LOSS", { entryPrice, lastPrice });
+  console.log("STOP LOSS", { side, entryPrice, STRATEGY_VALUE_TO_STOP_LOSS, lastPrice });
   if (side === "sell" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
@@ -113,6 +97,7 @@ const stopLoss = async (position) => {
       side: "buy",
       positionSide: positionSide
     };
+    console.log("STOP LOSS SELL", { order });
     await createOrder(order);
   }
   if (side === "buy" && entryPrice + STRATEGY_VALUE_TO_STOP_LOSS < lastPrice) {
@@ -123,6 +108,7 @@ const stopLoss = async (position) => {
       side: "sell",
       positionSide: positionSide
     };
+    console.log("STOP LOSS BUY", { order });
     await createOrder(order);
   }
 };
@@ -185,7 +171,7 @@ const {
   islandReversalTop
 } = require('./candle.patterns')
 
-const testToCreatePosition = async (data) => {
+const testToCreatePosition = async (candles5, candles15) => {
   console.log("testToCreatePosition");
   const lastIndex = data.length - 1;
   const signal = {};
@@ -209,9 +195,9 @@ const testToCreatePosition = async (data) => {
   const isLastThreeGreens = analyzeIfLastThreeCandlesAreGreen(data);
 
 
-  const limit = 50; // quantidade de candles a serem recuperados
-  const candles5 = await client.futuresCandles({ symbol: 'BTCUSDT', interval: "5m", limit })
-  const candles15 = await client.futuresCandles({ symbol: 'BTCUSDT', interval: '15m', limit })
+  // const limit = 50; // quantidade de candles a serem recuperados
+  // const candles5 = await client.futuresCandles({ symbol: 'BTCUSDT', interval: "5m", limit })
+  // const candles15 = await client.futuresCandles({ symbol: 'BTCUSDT', interval: '15m', limit })
     
   const isMorningStar = morningStar(candles5);
   const isShootingStar = shootingStar(candles5);
@@ -433,6 +419,31 @@ const testToCreatePosition = async (data) => {
   // return signal;
 }
 
+const getFuturesCandles = async (symbol = "BTCUSDT", timeframe = "5m", limit = 50) => {
+  try {
+    const candles = await exchange.fetchOHLCV(symbol, timeframe, undefined, limit);
+    return candles;
+  } catch (error) {
+    console.error("Erro ao obter candles de futuros: ", error);
+  }
+};
+
+const getCandles = async (symbol = "BTCUSDT", timeframe = "5m", limit = 50) => {
+  try {
+    const candles = await exchange.fetchOHLCV(symbol, timeframe, undefined, limit);
+    return candles.map(candle => ({
+      timestamp: candle[0],
+      open: candle[1],
+      high: candle[2],
+      low: candle[3],
+      close: candle[4],
+      volume: candle[5]
+    }));
+  } catch (error) {
+    console.error("Erro ao obter candles: ", error);
+  }
+};
+
 setInterval(async () => {
   console.log("\n\n\nrodando...", new Date());
   try {
@@ -441,13 +452,12 @@ setInterval(async () => {
     const hasOpenPosition = position && parseFloat(position.positionAmt) !== 0;
     console.log({ hasOpenPosition });
 
+    const candles5 = await getCandles(symbol);
+    const candles15 = await getCandles(symbol, "15m");
+
     if (!hasOpenPosition) {
-
-      // Verifica condição para criar uma ordem
-      await testToCreatePosition(candles);
-
-    } else { // se tem posição aberta
-
+      await testToCreatePosition(candles5, candles15);
+    } else {
       if (hasOpenPosition) {
         const openOrders = await getFutureOpenOrders(symbol);
         if (openOrders.length > 0) {
