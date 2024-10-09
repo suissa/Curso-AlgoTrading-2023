@@ -16,7 +16,7 @@ const STRATEGY_DIFF_TO_AVERAGE = 70;
 const STRATEGY_MAX_AVERAGE_PRICES = 6;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
-const STRATEGY_AMOUNT = 0.005;
+const STRATEGY_AMOUNT = 0.001;
 const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
@@ -590,7 +590,7 @@ const adjustLeverage = async (symbol, leverage) => {
 
 
 // Ajustar a alavancagem para 5x
-adjustLeverage("BTCUSDT", 5);
+adjustLeverage(symbol, STRATEGY_LEVERAGE);
 
 setInterval( async () => {
   console.log("\n\n\nrodando...", new Date());
