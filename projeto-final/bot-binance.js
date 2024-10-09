@@ -501,7 +501,7 @@ const stopLoss = async (position, amountOfAveragePrices) => {
 
   amountOfAveragePrices = 0;
   // se o lastPrice for menor que o entryPrice menos o valor do stop loss e side BUY
-  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice})
+  console.log("\n\n\n\n\n STOP LOSS", {entryPrice, lastPrice, amount, side, quantity})
   if (side == "BUY" && entryPrice - STRATEGY_VALUE_TO_STOP_LOSS > lastPrice) {
     const order = {
       symbol,
@@ -574,6 +574,22 @@ const averagePrice = async (position, lastPrice) => {
     }
   }
 }
+
+const adjustLeverage = async (symbol, leverage) => {
+  try {
+    const response = await client.futuresLeverage({
+      symbol: symbol,
+      leverage: leverage
+    });
+    console.log(`Alavancagem ajustada para ${leverage}x`, response);
+  } catch (error) {
+    console.error("Erro ao ajustar alavancagem: ", error);
+  }
+};
+
+
+// Ajustar a alavancagem para 5x
+adjustLeverage("BTCUSDT", 5);
 
 setInterval( async () => {
   console.log("\n\n\nrodando...", new Date());
