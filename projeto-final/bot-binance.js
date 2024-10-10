@@ -457,7 +457,7 @@ const getDataFromPosition = (position) => {
 const getFuturesAccountBalance = async () => {
   try {
     const balances = await client.futuresAccountBalance();
-    console.log("Saldo disponível de futuros: ", balances);
+    // console.log("Saldo disponível de futuros: ", balances);
     return balances;
   } catch (error) {
     console.error("Erro ao obter o saldo de futuros: ", error);
