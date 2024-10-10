@@ -22,7 +22,7 @@ let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
 
 
-const getPosition = async (symbol = "BTCUSDT") => {
+const getPosition = async (symbol = "BTCUSDC") => {
   try {
     const positions = await client.futuresPositionRisk({symbol});
     const position = positions.find(position => position.symbol === symbol);
@@ -46,7 +46,7 @@ const getCurrentPrice = async (symbol) => {
   }
 };
 
-const getCandles = async (symbol = "BTCUSDT", interval = "5m") => {
+const getCandles = async (symbol = "BTCUSDC", interval = "5m") => {
   try {
     const candles = await client.futuresCandles({
       symbol: symbol,
@@ -58,7 +58,7 @@ const getCandles = async (symbol = "BTCUSDT", interval = "5m") => {
     console.error(error);
   }
 }
-const cancelFutureOrder = async (symbol = "BTCUSDT", orderId) =>{
+const cancelFutureOrder = async (symbol = "BTCUSDC", orderId) =>{
   try {
     const response = await client.futuresCancelOrder({
       symbol: symbol,
@@ -70,7 +70,7 @@ const cancelFutureOrder = async (symbol = "BTCUSDT", orderId) =>{
   }
 }
 
-const getFutureOpenOrders = async (symbol = "BTCUSDT") => {
+const getFutureOpenOrders = async (symbol = "BTCUSDC") => {
   try {
     const orders = await client.futuresOpenOrders({
       symbol: symbol,
@@ -184,7 +184,7 @@ const testToCreatePosition = async (data) => {
   const lastIndex = data.length - 1;
   const signal = {};
 
-  const symbol = "BTCUSDT";
+  const symbol = "BTCUSDC";
   const shortPeriod = 50;
   const longPeriod = 200;
   const prices = data.map((entry) => parseFloat(entry.close));
@@ -204,8 +204,8 @@ const testToCreatePosition = async (data) => {
 
 
   const limit = 50; // quantidade de candles a serem recuperados
-  const candles5 = await client.futuresCandles({ symbol: 'BTCUSDT', interval: "5m", limit })
-  const candles15 = await client.futuresCandles({ symbol: 'BTCUSDT', interval: '15m', limit })
+  const candles5 = await client.futuresCandles({ symbol: 'BTCUSDC', interval: "5m", limit })
+  const candles15 = await client.futuresCandles({ symbol: 'BTCUSDC', interval: '15m', limit })
     
   const isMorningStar = morningStar(candles5);
   const isShootingStar = shootingStar(candles5);
@@ -466,7 +466,7 @@ const getFuturesAccountBalance = async () => {
 };
 
 
-const closeOrder = async (position, symbol = "BTCUSDT", lastPrice) => {
+const closeOrder = async (position, symbol = "BTCUSDC", lastPrice) => {
   const {hasOpenPosition, entryPrice, amount, side, quantity} = getDataFromPosition(position);
   console.log("\n\n\n Entrou na estratégia de fechamento - create order\n\n\n", {side});
   if (side === "BUY") {
@@ -543,7 +543,7 @@ const averagePrice = async (position, lastPrice) => {
     amountOfAveragePrices += 1;
     // PRIMEIRO CANCELA A ORDEM DE FECHAMENTO
     if (openOrders.length > 0) {
-      const cancel = await cancelFutureOrder("BTCUSDT", openOrders[0].orderId);
+      const cancel = await cancelFutureOrder("BTCUSDC", openOrders[0].orderId);
       console.log(cancel);
     }
     // SE a posição for de compra, cria uma ordem de venda
