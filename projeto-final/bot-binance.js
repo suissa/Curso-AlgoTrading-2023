@@ -359,7 +359,7 @@ const testToCreatePosition = async (data) => {
   }
 
   if (
-    isBullishTrend ||
+    // isBullishTrend ||
     !hadPreviousThreeCandlePattern && 
     trendUpTestPassCount < 2 && 
     !isLastSevenCandlesAreGreen && 
@@ -393,7 +393,7 @@ const testToCreatePosition = async (data) => {
   } 
   
   if (
-    isBearishTrend ||
+    // isBearishTrend ||
     !hadPreviousThreeCandlePattern && 
     trendDownTestPassCount < 2 && 
     !isLastSevenCandlesAreRed && 
