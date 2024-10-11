@@ -589,6 +589,20 @@ const adjustLeverage = async (symbol, leverage) => {
 };
 
 
+;(async () => {
+  
+  const quantity = STRATEGY_AMOUNT;
+  const order = {
+    symbol,
+    quantity,
+    type: "MARKET",
+    side: "BUY",
+    positionSide: "LONG", 
+  }
+  console.log({order});
+  const result = await createOrder(order);
+  console.log({result});
+})();
 // Ajustar a alavancagem para 5x
 adjustLeverage(symbol, STRATEGY_LEVERAGE);
 
