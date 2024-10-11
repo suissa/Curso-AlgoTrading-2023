@@ -13,7 +13,7 @@ const symbol = "BTCUSDC";
 const STRATEGY_DIFF_TO_CLOSE = 70;
 const STRATEGY_VALUE_TO_STOP_LOSS = 50;
 const STRATEGY_DIFF_TO_AVERAGE = 70;
-const STRATEGY_MAX_AVERAGE_PRICES = 6;
+const STRATEGY_MAX_AVERAGE_PRICES = 3;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
 const STRATEGY_AMOUNT = 0.005;
@@ -529,52 +529,52 @@ const stopLoss = async (position) => {
 const isBuyPriceWithinStrategyRange = (entryPrice) => entryPrice + STRATEGY_DIFF_TO_AVERAGE < price
 const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIFF_TO_AVERAGE > price
 
-const averagePrice = async (position, lastPrice) => {
-  const {hasOpenPosition, entryPrice, amount, side, quantity} = getDataFromPosition(position);
+// const averagePrice = async (position, lastPrice) => {
+//   const {hasOpenPosition, entryPrice, amount, side, quantity} = getDataFromPosition(position);
 
-  const positionPrice = amount * entryPrice / STRATEGY_LEVERAGE
-  const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
-  const balanceTotal = await getFuturesBalances("USDT")
+//   const positionPrice = amount * entryPrice / STRATEGY_LEVERAGE
+//   const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
+//   const balanceTotal = await getFuturesBalances("USDT")
 
-  const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
-  if((isBuyPriceWithinStrategyRange || isSellPriceWithinStrategyRange) 
-    && entryPrice > 0 
-    && balance > orderPrice) {
-    amountOfAveragePrices += 1;
-    // PRIMEIRO CANCELA A ORDEM DE FECHAMENTO
-    if (openOrders.length > 0) {
-      const cancel = await cancelFutureOrder("BTCUSDC", openOrders[0].orderId);
-      console.log(cancel);
-    }
-    // SE a posição for de compra, cria uma ordem de venda
-    // type: "LIMIT" para criar a ordem que será executada direto
-    if (side === "BUY") {
-      console.log("PREÇO MÉDIO - criando ordem de venda", {side});
-      const order = {
-        symbol,
-        quantity,
-        type: "LIMIT",
-        side: "SELL",
-        price: Number((entryPrice + STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
-      }
-      const result = await createOrder(order);
-      console.log(result);
-    }
-    // SE a posição for de venda, cria uma ordem de compra
-    if (side === "SELL") {
-      console.log("PREÇO MÉDIO - criando ordem de compra", {side});
-      const order = {
-        symbol,
-        quantity,
-        type: "LIMIT",
-        side: "SELL",
-        price: Number((entryPrice - STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
-      }
-      const result = await createOrder(order);
-      console.log(result);
-    }
-  }
-}
+//   const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
+//   if((isBuyPriceWithinStrategyRange || isSellPriceWithinStrategyRange) 
+//     && entryPrice > 0 
+//     && balance > orderPrice) {
+//     amountOfAveragePrices += 1;
+//     // PRIMEIRO CANCELA A ORDEM DE FECHAMENTO
+//     if (openOrders.length > 0) {
+//       const cancel = await cancelFutureOrder("BTCUSDC", openOrders[0].orderId);
+//       console.log(cancel);
+//     }
+//     // SE a posição for de compra, cria uma ordem de venda
+//     // type: "LIMIT" para criar a ordem que será executada direto
+//     if (side === "BUY") {
+//       console.log("PREÇO MÉDIO - criando ordem de venda", {side});
+//       const order = {
+//         symbol,
+//         quantity,
+//         type: "LIMIT",
+//         side: "SELL",
+//         price: Number((entryPrice + STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
+//       }
+//       const result = await createOrder(order);
+//       console.log(result);
+//     }
+//     // SE a posição for de venda, cria uma ordem de compra
+//     if (side === "SELL") {
+//       console.log("PREÇO MÉDIO - criando ordem de compra", {side});
+//       const order = {
+//         symbol,
+//         quantity,
+//         type: "LIMIT",
+//         side: "SELL",
+//         price: Number((entryPrice - STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
+//       }
+//       const result = await createOrder(order);
+//       console.log(result);
+//     }
+//   }
+// }
 
 const adjustLeverage = async (symbol, leverage) => {
   try {
@@ -626,9 +626,9 @@ setInterval( async () => {
       }
 
       // preço médio
-      if (STRATEGY_HAS_AVERAGE_PRICE && hasOpenPosition && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES0) {
-        return averagePrice(position, amountOfAveragePrices)
-      }
+      // if (STRATEGY_HAS_AVERAGE_PRICE && hasOpenPosition && amountOfAveragePrices < STRATEGY_MAX_AVERAGE_PRICES0) {
+      //   return averagePrice(position, amountOfAveragePrices)
+      // }
 
       // STOP LOSS
       
