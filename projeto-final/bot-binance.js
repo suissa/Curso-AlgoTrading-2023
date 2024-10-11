@@ -358,7 +358,9 @@ const testToCreatePosition = async (data) => {
     hadPreviosCandlePattern = true;
   }
 
-  if (!hadPreviousThreeCandlePattern && 
+  if (
+    isBullishTrend ||
+    !hadPreviousThreeCandlePattern && 
     trendUpTestPassCount < 2 && 
     !isLastSevenCandlesAreGreen && 
     ( 
@@ -390,7 +392,9 @@ const testToCreatePosition = async (data) => {
     console.log({result});
   } 
   
-  if (!hadPreviousThreeCandlePattern && 
+  if (
+    isBearishTrend ||
+    !hadPreviousThreeCandlePattern && 
     trendDownTestPassCount < 2 && 
     !isLastSevenCandlesAreRed && 
     ( 
