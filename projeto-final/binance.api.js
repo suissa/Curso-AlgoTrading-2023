@@ -13,19 +13,25 @@ class BinanceAPI {
       },
     });
   }
-
+  
   async getCurrentPrice(symbol) {
-    console.log("Preço getCurrentPrice", symbol)
+    console.log("Preço getCurrentPrice", symbol);
     try {
       const response = await this.client.get(`/fapi/v1/ticker/price`, {
         params: { symbol },
       });
-      return response.data.price;
+      console.log("Resposta da API getCurrentPrice:", response.data); // Adicionando log para verificar a resposta da API
+      if (response.data && response.data.price) {
+        return parseFloat(response.data.price); // Converte o preço para um número
+      } else {
+        throw new Error(`Resposta inesperada da API: ${JSON.stringify(response.data)}`);
+      }
     } catch (error) {
       console.error('Erro ao obter o preço atual: ', error);
       throw error;
     }
   }
+  
 
   async getCandles(symbol, interval = '5m', limit = 500) {
     try {
