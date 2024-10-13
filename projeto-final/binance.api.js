@@ -42,18 +42,22 @@ class BinanceAPI {
   }
   
 
-  async getCandles(symbol, interval = '5m', limit = 50) {
+
+  async getCandles (symbol, interval, limit) {
     try {
-      const response = await this.client.get('/fapi/v1/klines', {
-        params: { symbol, interval, limit },
+      const response = await axios.get('https://fapi.binance.com/fapi/v1/klines', {
+        params: {
+          symbol,
+          interval,
+          limit,
+        },
       });
       return response.data;
     } catch (error) {
-      console.error('Erro ao obter candles: ', error);
+      console.error('Erro ao obter candles:', error);
       throw error;
     }
-  }
-
+  };
   async getPositionRisk(symbol) {
     try {
       const response = await this.privateRequest('/fapi/v2/positionRisk', { symbol });
