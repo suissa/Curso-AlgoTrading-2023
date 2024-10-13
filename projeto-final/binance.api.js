@@ -8,6 +8,23 @@ const getPriceBySymbol = (data, symbol) => {
   return item ? item.price : null;
 };
 
+const formatCandle = (candleArray) => {
+  return {
+    openTime: candleArray[0],
+    open: parseFloat(candleArray[1]),
+    high: parseFloat(candleArray[2]),
+    low: parseFloat(candleArray[3]),
+    close: parseFloat(candleArray[4]),
+    volume: parseFloat(candleArray[5]),
+    closeTime: candleArray[6],
+    quoteAssetVolume: parseFloat(candleArray[7]),
+    numberOfTrades: candleArray[8],
+    takerBuyBaseAssetVolume: parseFloat(candleArray[9]),
+    takerBuyQuoteAssetVolume: parseFloat(candleArray[10]),
+    ignore: candleArray[11] // Este campo pode ser ignorado, mas inclui para ser fiel aos dados
+  };
+};
+
 class BinanceAPI {
   constructor(apiKey, apiSecret) {
     this.apiKey = apiKey;
@@ -52,7 +69,8 @@ class BinanceAPI {
           limit,
         },
       });
-      return response.data;
+      const formattedCandle = formatCandle(response.data);
+      return formattedCandle;
     } catch (error) {
       console.error('Erro ao obter candles:', error);
       throw error;
