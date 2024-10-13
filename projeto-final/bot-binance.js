@@ -216,8 +216,8 @@ const testToCreatePosition = async (data) => {
 
 
   const limit = 50; // quantidade de candles a serem recuperados
-  const candles5 = await client.futuresCandles({ symbol: 'BTCUSDC', interval: "5m", limit })
-  const candles15 = await client.futuresCandles({ symbol: 'BTCUSDC', interval: '15m', limit })
+  const candles5 = await client.getCandles({ symbol: 'BTCUSDC', interval: "5m", limit })
+  const candles15 = await client.getCandles({ symbol: 'BTCUSDC', interval: '15m', limit })
     
   const isMorningStar = morningStar(candles5);
   const isShootingStar = shootingStar(candles5);

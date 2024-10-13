@@ -42,7 +42,7 @@ class BinanceAPI {
   }
   
 
-  async getCandles(symbol, interval = '5m', limit = 500) {
+  async getCandles(symbol, interval = '5m', limit = 50) {
     try {
       const response = await this.client.get('/fapi/v1/klines', {
         params: { symbol, interval, limit },
