@@ -60,6 +60,7 @@ class BinanceAPI {
   
 
   async getCandles(symbol = 'BTCUSDC', interval = '5m', limit = 50) {
+    console.log("getCandles maroto:", {symbol, interval, limit});
     try {
       if (!symbol || !interval || !limit) {
         throw new Error('Parâmetros inválidos: é necessário definir symbol, interval e limit corretamente.');
@@ -76,7 +77,7 @@ class BinanceAPI {
       throw error;
     }
   };
-  
+
   async getPositionRisk(symbol) {
     try {
       const response = await this.privateRequest('/fapi/v2/positionRisk', { symbol });
