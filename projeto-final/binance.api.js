@@ -45,7 +45,7 @@ class BinanceAPI {
 
   async getCandles (symbol, interval, limit) {
     try {
-      const response = await axios.get('https://fapi.binance.com/fapi/v1/klines', {
+      const response = await axios.get('https://api.binance.com/api/v3/kliness', {
         params: {
           symbol,
           interval,
