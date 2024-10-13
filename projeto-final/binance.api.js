@@ -69,7 +69,7 @@ class BinanceAPI {
           limit,
         },
       });
-      const formattedCandle = formatCandle(response.data);
+      const formattedCandle = response.data.map(formatCandle);
       return formattedCandle;
     } catch (error) {
       console.error('Erro ao obter candles:', error);
