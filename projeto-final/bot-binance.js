@@ -633,12 +633,15 @@ setInterval( async () => {
     console.log({position});
     
     const candles = await getCandles(symbol);
+    console.log({candles});
     const lastPrice = candles[candles.length - 1].close;
+    console.log({lastPrice});
 
     const balances = await getFuturesAccountBalance();
     const {balance} = balances[0];
     // console.log({balances});
 
+    return false;
     if (!hasOpenPosition) {
 
       // Verifica condição para criar uma ordem
