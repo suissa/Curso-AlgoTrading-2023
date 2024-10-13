@@ -34,7 +34,7 @@ const getPosition = async (symbol = "BTCUSDC") => {
 
 const getCurrentPrice = async (symbol) => {
   try {
-    const ticker = await client.prices({ symbol });
+    const ticker = await client.getCurrentPrice({ symbol });
     console.log(`Preço atual de ${symbol}:`, ticker[symbol]);
     return ticker[symbol];
   } catch (error) {
