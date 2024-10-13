@@ -21,11 +21,17 @@ const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
 
+const getFirstNonZeroPosition = (positions) => {
+  return positions.find(position => parseFloat(position.positionAmt) !== 0);
+};
+
 const getPosition = async (symbol = "BTCUSDC") => {
   try {
-    const position = await client.getPositionRisk(symbol);
-    console.log(position);
-    return position;
+    const positions = await client.getPositionRisk(symbol);
+    console.log(positions);
+    const firstNonZeroPosition = getFirstNonZeroPosition(response.position);
+
+    return firstNonZeroPosition;
   } catch (error) {
     console.error(error);
   }
