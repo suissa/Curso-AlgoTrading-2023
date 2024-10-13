@@ -28,8 +28,8 @@ const getFirstNonZeroPosition = (positions) => {
 const getPosition = async (symbol = "BTCUSDC") => {
   try {
     const positions = await client.getPositionRisk(symbol);
-    console.log(positions);
-    const firstNonZeroPosition = getFirstNonZeroPosition(response.position);
+    console.log("positions: ", positions);
+    const firstNonZeroPosition = getFirstNonZeroPosition(positions);
 
     return firstNonZeroPosition;
   } catch (error) {
