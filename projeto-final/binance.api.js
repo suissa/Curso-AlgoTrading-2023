@@ -1,6 +1,11 @@
 const axios = require('axios');
 const crypto = require('crypto');
 
+const getPriceBySymbol = (data, symbol) => {
+    const item = data.find(entry => entry.symbol === symbol);
+    return item ? item.price : null;
+  };
+
 class BinanceAPI {
   constructor(apiKey, apiSecret) {
     this.apiKey = apiKey;
@@ -13,7 +18,7 @@ class BinanceAPI {
       },
     });
   }
-  
+
   async getCurrentPrice(symbol) {
     console.log("Preço getCurrentPrice", symbol);
     try {
@@ -21,8 +26,10 @@ class BinanceAPI {
         params: { symbol },
       });
       console.log("Resposta da API getCurrentPrice:", response.data); // Adicionando log para verificar a resposta da API
-      if (response.data && response.data.price) {
-        return parseFloat(response.data.price); // Converte o preço para um número
+      const price = getPriceBySymbol(response.data, 'BTCUSDC');
+
+      if (response.data && price) {
+        return parseFloat(price); // Converte o preço para um número
       } else {
         throw new Error(`Resposta inesperada da API: ${JSON.stringify(response.data)}`);
       }
