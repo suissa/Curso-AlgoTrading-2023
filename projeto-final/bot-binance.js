@@ -21,7 +21,6 @@ const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
 
-
 const getPosition = async (symbol = "BTCUSDC") => {
   try {
     const position = await client.getPositionRisk(symbol);
@@ -30,6 +29,8 @@ const getPosition = async (symbol = "BTCUSDC") => {
   } catch (error) {
     console.error(error);
   }
+};
+
 
 const getCurrentPrice = async (symbol) => {
   try {
