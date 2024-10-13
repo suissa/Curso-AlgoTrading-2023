@@ -65,7 +65,7 @@ const getCurrentPrice = async (symbol) => {
 
 const getCandles = async (symbol = "BTCUSDC", interval = "5m") => {
   try {
-    const candles = await client.getCandles("BTCUSDC", interval);
+    const candles = await client.getCandles();
     // console.log("Last candle: ", candles[candles.length - 1]);
     return candles;
   } catch (error) {
