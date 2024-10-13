@@ -23,9 +23,20 @@ let CURRENT_PRICE = 0;
 
 const getFirstNonZeroPosition = (positions) => {
   console.log("getFirstNonZeroPosition positions: ", positions);
+  
+  // Verificar se todas as posições têm positionAmt igual a 0
+  const allZero = positions.every(position => parseFloat(position.positionAmt) === 0);
+  
+  if (allZero) {
+    console.log("Todas as posições são zero, retornando a primeira posição:", positions[0]);
+    return positions[0];
+  }
+  
+  // Encontrar a primeira posição cujo positionAmt não seja 0
   const position = positions.find(position => parseFloat(position.positionAmt) !== 0);
-  console.log("getFirstNonZeroPosition position: ", position);
-  return position
+  console.log("getFirstNonZeroPosition position (não zero): ", position);
+  
+  return position;
 };
 
 const getPosition = async (symbol = "BTCUSDC") => {
