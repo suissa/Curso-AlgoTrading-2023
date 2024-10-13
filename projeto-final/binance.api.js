@@ -59,17 +59,24 @@ class BinanceAPI {
   }
   
 
-
-  async getCandles (symbol, interval, limit) {
+  async getCandles(symbol = 'BTCUSDC', interval = '5m', limit = 50) {
     try {
-      const response = await axios.get(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
-      const formattedCandle = response.data.map(formatCandle);
-      return formattedCandle;
+      if (!symbol || !interval || !limit) {
+        throw new Error('Parâmetros inválidos: é necessário definir symbol, interval e limit corretamente.');
+      }
+  
+      const response = await axios.get(
+        `https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+      );
+  
+      const formattedCandles = response.data.map(formatCandle);
+      return formattedCandles;
     } catch (error) {
       console.error('getCandles Erro ao obter candles:', error);
       throw error;
     }
   };
+  
   async getPositionRisk(symbol) {
     try {
       const response = await this.privateRequest('/fapi/v2/positionRisk', { symbol });
