@@ -22,7 +22,10 @@ let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
 
 const getFirstNonZeroPosition = (positions) => {
-  return positions.find(position => parseFloat(position.positionAmt) !== 0);
+  console.log("getFirstNonZeroPosition positions: ", positions);
+  const position = positions.find(position => parseFloat(position.positionAmt) !== 0);
+  console.log("getFirstNonZeroPosition position: ", position);
+  return position
 };
 
 const getPosition = async (symbol = "BTCUSDC") => {
