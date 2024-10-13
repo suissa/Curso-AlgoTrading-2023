@@ -641,7 +641,7 @@ setInterval( async () => {
     const {balance} = balances[0];
     // console.log({balances});
 
-    return false;
+    // return false;
     if (!hasOpenPosition) {
 
       // Verifica condição para criar uma ordem
