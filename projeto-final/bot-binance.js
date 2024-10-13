@@ -5,8 +5,8 @@ const API_SECRET = process.env.API_SECRET;
 const chalk = require('chalk');
 
 
-const client = require('./factories/binance-api-node')(API_KEY, API_SECRET);
-const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
+const client = require('./binance.api')(API_KEY, API_SECRET);
+// const binance = require('./factories/node-binance-api')(API_KEY, API_SECRET);
 
 
 const symbol = "BTCUSDC";
@@ -24,16 +24,12 @@ let CURRENT_PRICE = 0;
 
 const getPosition = async (symbol = "BTCUSDC") => {
   try {
-    const positions = await client.futuresPositionRisk({symbol});
-    const position = positions.find(position => position.symbol === symbol);
+    const position = await client.getPositionRisk(symbol);
     console.log(position);
-
     return position;
   } catch (error) {
     console.error(error);
   }
-}
-
 
 const getCurrentPrice = async (symbol) => {
   try {
@@ -48,36 +44,30 @@ const getCurrentPrice = async (symbol) => {
 
 const getCandles = async (symbol = "BTCUSDC", interval = "5m") => {
   try {
-    const candles = await client.futuresCandles({
-      symbol: symbol,
-      interval: interval
-    });
+    const candles = await client.getCandles(symbol, interval);
     // console.log("Last candle: ", candles[candles.length - 1]);
     return candles;
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao obter candles: ", error);
   }
 }
-const cancelFutureOrder = async (symbol = "BTCUSDC", orderId) =>{
+
+const cancelFutureOrder = async (symbol = "BTCUSDC", orderId) => {
   try {
-    const response = await client.futuresCancelOrder({
-      symbol: symbol,
-      orderId: orderId
-    });
+    const response = await client.futuresCancelOrder(symbol, orderId);
     return response;
   } catch (error) {
+    console.error("Erro ao cancelar a ordem: ", error);
     throw error;
   }
 }
 
 const getFutureOpenOrders = async (symbol = "BTCUSDC") => {
   try {
-    const orders = await client.futuresOpenOrders({
-      symbol: symbol,
-    });
+    const orders = await client.futuresOpenOrders(symbol);
     return orders;
   } catch (err) {
-    console.error(err);
+    console.error("Erro ao obter ordens abertas: ", err);
   }
 }
 
@@ -100,6 +90,7 @@ const createOrder = async (order) => {
     console.error("Erro ao criar ordem: ", error);
   }
 };
+
 
 const isRedCandle = (candle) => candle.close < candle.open;
 const analyzeIfLastThreeCandlesAreRed = (candles) => {
@@ -429,17 +420,18 @@ const testToCreatePosition = async (data) => {
   return signal;
 }
 
-const getFuturesBalances = async (symbol = "USDT") => {
+const getFuturesBalances = async (symbol = "USDC") => {
   try {
-    const accountInfo = await binance.futuresBalance();
+    const accountInfo = await client.futuresBalance();
     const balances = accountInfo.filter(balance => balance.asset === symbol);
-    const {balance} = balances[0];
+    const { balance } = balances[0];
+    console.log('Futures Balances:', balances, { balance });
     return parseFloat(balance);
-    console.log('Futures Balances:', balances, {balance});
   } catch (error) {
-    console.error('Error fetching futures account info:', error);
+    console.error('Erro ao obter saldo de futuros: ', error);
   }
 }
+
 
 const calcOrderPrice = (price, quantity = 0.002, leverage = 5) => {
   if (price < 27000) return false;
@@ -460,7 +452,7 @@ const getDataFromPosition = (position) => {
 
 const getFuturesAccountBalance = async () => {
   try {
-    const balances = await client.futuresAccountBalance();
+    const balances = await client.futuresBalance();
     // console.log("Saldo disponível de futuros: ", balances);
     return balances;
   } catch (error) {
@@ -468,7 +460,6 @@ const getFuturesAccountBalance = async () => {
     throw error;
   }
 };
-
 
 const closeOrder = async (position, symbol = "BTCUSDC", lastPrice) => {
   const {hasOpenPosition, entryPrice, amount, side, quantity} = getDataFromPosition(position);
@@ -538,7 +529,7 @@ const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIF
 
 //   const positionPrice = amount * entryPrice / STRATEGY_LEVERAGE
 //   const orderPrice = calcOrderPrice(CURRENT_PRICE, quantity, 5)
-//   const balanceTotal = await getFuturesBalances("USDT")
+//   const balanceTotal = await getFuturesBalances("USDC")
 
 //   const balance = parseFloat(Math.abs(balanceTotal - positionPrice).toFixed(2))
 //   if((isBuyPriceWithinStrategyRange || isSellPriceWithinStrategyRange) 
@@ -582,10 +573,7 @@ const isSellPriceWithinStrategyRange = (entryPrice) => entryPrice - STRATEGY_DIF
 
 const adjustLeverage = async (symbol, leverage) => {
   try {
-    const response = await client.futuresLeverage({
-      symbol: symbol,
-      leverage: leverage
-    });
+    const response = await client.futuresLeverage(symbol, leverage);
     console.log(`Alavancagem ajustada para ${leverage}x`, response);
   } catch (error) {
     console.error("Erro ao ajustar alavancagem: ", error);
