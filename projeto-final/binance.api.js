@@ -20,24 +20,27 @@ class BinanceAPI {
   }
 
   async getCurrentPrice(symbol) {
-    console.log("Preço getCurrentPrice", symbol);
     try {
-      const response = await this.client.get(`/fapi/v1/ticker/price`, {
-        params: { symbol },
-      });
-      console.log("Resposta da API getCurrentPrice:", response.data); // Adicionando log para verificar a resposta da API
-      const price = getPriceBySymbol(response.data, 'BTCUSDC');
-
-      if (response.data && price) {
-        return parseFloat(price); // Converte o preço para um número
+      // Obtém os preços atuais de todos os símbolos
+      const ticker = await client.getCurrentPrice(symbol);
+      console.log("Resposta da API getCurrentPrice:", ticker);
+      
+      // Encontra o objeto correspondente ao símbolo desejado
+      const foundTicker = ticker.find(t => t.symbol === symbol);
+  
+      if (foundTicker) {
+        console.log(`Preço atual de ${symbol}:`, foundTicker.price);
+        return foundTicker.price;
       } else {
-        throw new Error(`Resposta inesperada da API: ${JSON.stringify(response.data)}`);
+        console.error(`Símbolo ${symbol} não encontrado na resposta da API.`);
+        return null;
       }
     } catch (error) {
-      console.error('Erro ao obter o preço atual: ', error);
+      console.error("Erro ao obter o preço atual: ", error);
       throw error;
     }
-  }
+  };
+  
   
 
   async getCandles(symbol, interval = '5m', limit = 500) {
