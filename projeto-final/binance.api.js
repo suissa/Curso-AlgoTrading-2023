@@ -28,7 +28,7 @@ class BinanceAPI {
         params: { symbol },
       });
       console.log("Resposta da API getCurrentPrice:", response.data); // Verifica a resposta da API
-      const price = getPriceBySymbol(response.data, symbol);
+      const price = getPriceBySymbol(response.data, "BTCUSDT");
       console.log("Preço getCurrentPrice:", price);
       if (price) {
         return parseFloat(price); // Converte o preço para um número
