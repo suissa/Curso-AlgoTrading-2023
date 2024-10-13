@@ -2,7 +2,9 @@ const axios = require('axios');
 const crypto = require('crypto');
 
 const getPriceBySymbol = (data, symbol) => {
+  console.log({data, symbol});
   const item = data.find(entry => entry.symbol === symbol);
+  console.log({item});
   return item ? item.price : null;
 };
 
@@ -26,7 +28,7 @@ class BinanceAPI {
         params: { symbol },
       });
       console.log("Resposta da API getCurrentPrice:", response.data); // Verifica a resposta da API
-      const price = response.data.price;
+      const price = getPriceBySymbol(response.data, symbol);
       console.log("Preço getCurrentPrice:", price);
       if (price) {
         return parseFloat(price); // Converte o preço para um número
