@@ -62,17 +62,11 @@ class BinanceAPI {
 
   async getCandles (symbol, interval, limit) {
     try {
-      const response = await axios.get('https://fapi.binance.com/fapi/v1/klines', {
-        params: {
-          symbol,
-          interval,
-          limit,
-        },
-      });
+      const response = await axios.get(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
       const formattedCandle = response.data.map(formatCandle);
       return formattedCandle;
     } catch (error) {
-      console.error('Erro ao obter candles:', error);
+      console.error('getCandles Erro ao obter candles:', error);
       throw error;
     }
   };
