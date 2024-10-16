@@ -65,7 +65,7 @@ const getCurrentPrice = async (symbol) => {
 
 const getCandles = async (symbol = "BTCUSDC", interval = "5m") => {
   try {
-    const candles = await client.getCandles();
+    const candles = await client.getCandles("BTCUSDC");
     // console.log("Last candle: ", candles[candles.length - 1]);
     return candles;
   } catch (error) {
@@ -631,6 +631,8 @@ setInterval( async () => {
     const quantity = Math.abs(amount);
     console.log({hasOpenPosition});
     console.log({position});
+    console.log("symbol aqui ",{symbol});
+    
     
     const candles = await getCandles(symbol);
     console.log({candles});
