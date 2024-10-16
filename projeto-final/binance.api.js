@@ -66,10 +66,10 @@ class BinanceAPI {
       if (!symbol || !interval || !limit) {
         throw new Error('Parâmetros inválidos: é necessário definir symbol, interval e limit corretamente.');
       }
-  
-      const response = await axios.get(
-        `https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
-      );
+      console.log("symbol: ", symbol)
+      const url = `https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+      console.log("url: ", url)
+      const response = await axios.get(url);
   
       const formattedCandles = response.data.map(formatCandle);
       return formattedCandles;
