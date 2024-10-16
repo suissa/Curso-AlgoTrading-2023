@@ -633,9 +633,8 @@ setInterval( async () => {
     console.log({position});
     console.log("symbol aqui ",{symbol});
     
-    
     const candles = await getCandles(symbol);
-    console.log({candles});
+    // console.log({candles});
     const lastPrice = candles[candles.length - 1].close;
     console.log({lastPrice});
 
