@@ -39,15 +39,15 @@ class BinanceAPI {
   }
 
   async getCurrentPrice(symbol) {
-    console.log("binance.api Preço getCurrentPrice", symbol);
+    // console.log("binance.api Preço getCurrentPrice", symbol);
     try {
       const response = await this.client.get(`/fapi/v1/ticker/price`, {
         params: { symbol },
       });
-      console.log("Resposta da API getCurrentPrice:", response.data); // Verifica a resposta da API
+      // console.log("Resposta da API getCurrentPrice:", response.data); // Verifica a resposta da API
       // const price = getPriceBySymbol(response.data, "BTCUSDT");
       const price = response.data.price;
-      console.log("Preço getCurrentPrice:", price);
+      console.log("getCurrentPrice Preço getCurrentPrice:", price);
       if (price) {
         return parseFloat(price); // Converte o preço para um número
       } else {
@@ -62,14 +62,14 @@ class BinanceAPI {
 
   async getCandles(symbol = 'BTCUSDC', interval = '5m', limit = 50) {
      
-    console.log("getCandles maroto:", {symbol, interval, limit});
+    // console.log("getCandles maroto:", {symbol, interval, limit});
     try {
       if (!symbol || !interval || !limit) {
         throw new Error('Parâmetros inválidos: é necessário definir symbol, interval e limit corretamente.');
       }
-      console.log("symbol: ", symbol)
+      // console.log("symbol: ", symbol)
       const url = `https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDC&interval=${interval}&limit=${limit}`
-      console.log("url: ", url)
+      // console.log("url: ", url)
       const response = await axios.get(url);
   
       const formattedCandles = response.data.map(formatCandle);
