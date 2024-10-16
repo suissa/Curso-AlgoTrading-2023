@@ -61,14 +61,14 @@ class BinanceAPI {
   
 
   async getCandles(symbol = 'BTCUSDC', interval = '5m', limit = 50) {
-    const SYMBOL = symbol.symbol 
-    console.log("getCandles maroto:", {SYMBOL, interval, limit});
+     
+    console.log("getCandles maroto:", {symbol, interval, limit});
     try {
-      if (!SYMBOL || !interval || !limit) {
+      if (!symbol || !interval || !limit) {
         throw new Error('Parâmetros inválidos: é necessário definir symbol, interval e limit corretamente.');
       }
-      console.log("SYMBOL: ", SYMBOL)
-      const url = `https://fapi.binance.com/fapi/v1/klines?symbol=${SYMBOL}&interval=${interval}&limit=${limit}`
+      console.log("symbol: ", symbol)
+      const url = `https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDC&interval=${interval}&limit=${limit}`
       console.log("url: ", url)
       const response = await axios.get(url);
   
