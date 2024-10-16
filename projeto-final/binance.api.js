@@ -39,7 +39,7 @@ class BinanceAPI {
   }
 
   async getCurrentPrice(symbol) {
-    console.log("Preço getCurrentPrice", symbol);
+    console.log("binance.api Preço getCurrentPrice", symbol);
     try {
       const response = await this.client.get(`/fapi/v1/ticker/price`, {
         params: { symbol },

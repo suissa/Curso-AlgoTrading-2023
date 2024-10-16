@@ -622,6 +622,11 @@ adjustLeverage(symbol, STRATEGY_LEVERAGE);
 setInterval( async () => {
   console.log("\n\n\nrodando...", new Date());
   try {
+
+    const price = await getCurrentPrice("BTCUSDC")
+    console.log("")
+    return false;
+
     CURRENT_PRICE = await getCurrentPrice(symbol);
     const position = await getPosition(symbol);
     const hasOpenPosition = position.positionAmt != "0.000";
