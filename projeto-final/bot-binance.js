@@ -93,9 +93,10 @@ const getFutureOpenOrders = async (symbol = "BTCUSDC") => {
 }
 
 const createOrder = async (order) => {
-  console.log("createOrder", order);
+  order.type="LIMIT";
   if (order.type === "LIMIT") order.timeInForce = "GTC";
-  if (order.type === "MARKET") delete order.price;
+  console.log("createOrder", order);
+  // if (order.type === "MARKET") delete order.price;
 
   // Adiciona o positionSide, obrigatório em ordens de futuros
   if (!order.positionSide) {
@@ -395,9 +396,10 @@ const testToCreatePosition = async (data) => {
     const order = {
       symbol,
       quantity,
-      type: "MARKET",
+      type: "LIMIT",
       side: "BUY",
-      positionSide: "LONG", 
+      positionSide: "LONG",
+      price: CURRENT_PRICE,
     }
     console.log({order});
     const result = await createOrder(order);
@@ -424,14 +426,14 @@ const testToCreatePosition = async (data) => {
       isIslandReversalTop
     )) {
     console.log("\n\n\n Entrou na estratégia SELL - create order", {isSmaCrossOver, isRsiOverSold, isMacdCrossOver, isLastThreeReds});
-    const price = data[lastIndex].close; // pega o último preço
     const quantity = STRATEGY_AMOUNT;
     const order = {
       quantity,
       symbol,
-      type: "MARKET",
+      type: "LIMIT",
       side: "SELL",
       positionSide: "SHORT", 
+      price: CURRENT_PRICE,
     }
     console.log({order});
     const result = await createOrder(order);
@@ -454,7 +456,7 @@ const getFuturesBalances = async (symbol = "USDC") => {
 }
 
 
-const calcOrderPrice = (price, quantity = 0.002, leverage = 5) => {
+const calcOrderPrice = (price, quantity = 0.005, leverage = 5) => {
   if (price < 27000) return false;
   const orderPrice = price * quantity / STRATEGY_LEVERAGE;
   // console.log({orderPrice})
