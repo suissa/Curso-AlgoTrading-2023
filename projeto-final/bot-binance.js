@@ -17,7 +17,7 @@ const STRATEGY_MAX_AVERAGE_PRICES = 3;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
 const STRATEGY_AMOUNT = 0.005;
-const STRATEGY_LEVERAGE = 5;
+const STRATEGY_LEVERAGE = 7;
 let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
 
