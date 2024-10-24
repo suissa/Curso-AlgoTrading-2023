@@ -104,6 +104,7 @@ const createOrder = async (order) => {
     return;
   }
 
+  order.price = await getCurrentPrice("BTCUSDC");
   try {
     const result = await client.futuresOrder(order);
     console.log("Ordem criada: ", result);
