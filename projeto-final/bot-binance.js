@@ -633,7 +633,7 @@ setInterval( async () => {
     const quantity = Math.abs(amount);
     console.log({hasOpenPosition});
     console.log({position});
-    console.log("symbol aqui ",{symbol});
+    // console.log("symbol aqui ",{symbol});
     
     const candles = await getCandles(symbol);
     // console.log({candles});
@@ -642,7 +642,7 @@ setInterval( async () => {
 
     const balances = await getFuturesAccountBalance();
     const {balance} = balances[0];
-    // console.log({balances});
+    console.log({balances});
 
     // return false;
     if (!hasOpenPosition) {
