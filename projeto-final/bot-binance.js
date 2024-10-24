@@ -493,7 +493,7 @@ const closeOrder = async (position, symbol = "BTCUSDC", lastPrice) => {
       symbol,
       price: Number((entryPrice + STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
       quantity,
-      type: "MARKET",
+      type: "LIMIT",
       side: "SELL",
       positionSide: "LONG",
     }
@@ -505,7 +505,7 @@ const closeOrder = async (position, symbol = "BTCUSDC", lastPrice) => {
       symbol,
       price: Number((entryPrice - STRATEGY_DIFF_TO_CLOSE).toFixed(2)),
       quantity,
-      type: "MARKET",
+      type: "LIMIT",
       side: "BUY",
       positionSide: "SHORT",
     }
