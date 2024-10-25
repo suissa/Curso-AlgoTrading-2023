@@ -17,7 +17,7 @@ const STRATEGY_MAX_AVERAGE_PRICES = 3;
 const STRATEGY_HAS_AVERAGE_PRICE = false;
 const STRATEGY_HAS_STOP_LOSS = true;
 const STRATEGY_AMOUNT = 0.005;
-const STRATEGY_LEVERAGE = 7;
+const STRATEGY_LEVERAGE = 5;
 let amountOfAveragePrices = 0;
 let CURRENT_PRICE = 0;
 
@@ -607,20 +607,22 @@ const adjustLeverage = async (symbol, leverage) => {
 };
 
 
-// ;(async () => {
+;(async () => {
   
-//   const quantity = STRATEGY_AMOUNT;
-//   const order = {
-//     symbol,
-//     quantity,
-//     type: "MARKET",
-//     side: "BUY",
-//     positionSide: "LONG", 
-//   }
-//   console.log({order});
-//   const result = await createOrder(order);
-//   console.log({result});
-// })();
+  CURRENT_PRICE = await getCurrentPrice("BTCUSDC");
+  const quantity = STRATEGY_AMOUNT;
+  const order = {
+    symbol,
+    quantity,
+    type: "LIMIT",
+    side: "BUY",
+    positionSide: "LONG", 
+    price: CURRENT_PRICE
+  }
+  console.log({order});
+  const result = await createOrder(order, CURRENT_PRICE);
+  console.log({result});
+})();
 // Ajustar a alavancagem para 5x
 adjustLeverage(symbol, STRATEGY_LEVERAGE);
 
