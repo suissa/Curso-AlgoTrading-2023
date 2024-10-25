@@ -92,7 +92,8 @@ const getFutureOpenOrders = async (symbol = "BTCUSDC") => {
   }
 }
 
-const createOrder = async (order) => {
+const createOrder = async (order, price) => {
+  console.log("createOrder", { order, price });
   order.type="LIMIT";
   if (order.type === "LIMIT") order.timeInForce = "GTC";
   console.log("createOrder", order);
@@ -104,8 +105,7 @@ const createOrder = async (order) => {
     return;
   }
 
-  order.price = await getCurrentPrice("BTCUSDC");
-  try {
+  order.price = price;
     const result = await client.futuresOrder(order);
     console.log("Ordem criada: ", result);
     return result;
@@ -193,7 +193,7 @@ const {
   islandReversalTop
 } = require('./candle.patterns')
 
-const testToCreatePosition = async (data) => {
+const testToCreatePosition = async (data, PRICE) => {
   console.log("testToCreatePosition");
   const lastIndex = data.length - 1;
   const signal = {};
@@ -403,7 +403,7 @@ const testToCreatePosition = async (data) => {
       price: CURRENT_PRICE,
     }
     console.log({order});
-    const result = await createOrder(order);
+    const result = await createOrder(order, PRICE);
     console.log({result});
   } 
   
@@ -437,7 +437,7 @@ const testToCreatePosition = async (data) => {
       price: CURRENT_PRICE,
     }
     console.log({order});
-    const result = await createOrder(order);
+    const result = await createOrder(order, PRICE);
     console.log({result});
   }
 
@@ -649,7 +649,7 @@ setInterval( async () => {
     if (!hasOpenPosition) {
 
       // Verifica condição para criar uma ordem
-      await testToCreatePosition(candles);
+      await testToCreatePosition(candles, CURRENT_PRICE);
 
     } else { // se tem posição aberta
 
