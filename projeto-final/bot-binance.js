@@ -93,6 +93,7 @@ const getFutureOpenOrders = async (symbol = "BTCUSDC") => {
 }
 
 const createOrder = async (order, price) => {
+  
   console.log("createOrder", { order, price });
   order.type="LIMIT";
   if (order.type === "LIMIT") order.timeInForce = "GTC";
@@ -106,6 +107,7 @@ const createOrder = async (order, price) => {
   }
 
   order.price = price;
+  try {
     const result = await client.futuresOrder(order);
     console.log("Ordem criada: ", result);
     return result;
