@@ -647,7 +647,7 @@ setInterval( async () => {
 
     const balances = await getFuturesAccountBalance();
     const {balance} = balances[0];
-    // console.log({balances});
+    console.log({balances});
 
     // return false;
     if (!hasOpenPosition) {
