@@ -56,7 +56,7 @@ const getCurrentPrice = async (symbol) => {
   try {
     const ticker = await client.getCurrentPrice(symbol);
     console.log(`Preço atual de ${symbol}:`, ticker);
-    return ticker[symbol];
+    return ticker;
   } catch (error) {
     console.error("Erro ao obter o preço atual: ", error);
     throw error;
